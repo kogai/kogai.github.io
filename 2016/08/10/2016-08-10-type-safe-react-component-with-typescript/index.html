@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>TypeScript✕ReactJSで型安全なComponentを手に入れる | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="React.Proptypesに感じている不満React組み込みのProptypesによる型検査は、実行時検証であり、アプリケーションを起動して、実際にコンポーネントを描画してみるまでエラーに気づけない。また、React独自の機能であるので、他の下層DOMライブラリでも同様の型検査をできるわけではない。さらに、Proptypesはコンポーネントに定義するので、型定義がViewに紐付いてしまう(ドメ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript✕ReactJSで型安全なComponentを手に入れる">
+<meta property="og:url" content="https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="React.Proptypesに感じている不満React組み込みのProptypesによる型検査は、実行時検証であり、アプリケーションを起動して、実際にコンポーネントを描画してみるまでエラーに気づけない。また、React独自の機能であるので、他の下層DOMライブラリでも同様の型検査をできるわけではない。さらに、Proptypesはコンポーネントに定義するので、型定義がViewに紐付いてしまう(ドメ">
+<meta property="og:updated_time" content="2017-04-13T12:16:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TypeScript✕ReactJSで型安全なComponentを手に入れる">
+<meta name="twitter:description" content="React.Proptypesに感じている不満React組み込みのProptypesによる型検査は、実行時検証であり、アプリケーションを起動して、実際にコンポーネントを描画してみるまでエラーに気づけない。また、React独自の機能であるので、他の下層DOMライブラリでも同様の型検査をできるわけではない。さらに、Proptypesはコンポーネントに定義するので、型定義がViewに紐付いてしまう(ドメ">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-2016-08-10-type-safe-react-component-with-typescript" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/" class="article-date">
+  <time datetime="2016-08-10T14:23:35.000Z" itemprop="datePublished">2016-08-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      TypeScript✕ReactJSで型安全なComponentを手に入れる
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<h2 id="React-Proptypesに感じている不満"><a href="#React-Proptypesに感じている不満" class="headerlink" title="React.Proptypesに感じている不満"></a>React.Proptypesに感じている不満</h2><p>React組み込みのProptypesによる型検査は、実行時検証であり、アプリケーションを起動して、実際にコンポーネントを描画してみるまでエラーに気づけない。<br>また、React独自の機能であるので、他の下層DOMライブラリでも同様の型検査をできるわけではない。<br>さらに、Proptypesはコンポーネントに定義するので、型定義がViewに紐付いてしまう(ドメイン知識がViewに紐付いてしまう)<br>型定義の多くはドメイン知識に紐付いており、ViewではなくModel(State)レイヤーで定義したい。</p>
+<p>そこで本稿ではTypeScriptの静的解析の支援を受けて、型安全なコンポーネントを定義することでこの問題を解決する方法について説明したい。<br>※なお、ReactにはFacebook謹製のFlowTypeがあるが、あくまでアプリケーションの主体はModel層にあり、Model層はRxJSによるState川を作る設計にしたいという理由でTypeScriptを選択している</p>
+<h2 id="導入方法"><a href="#導入方法" class="headerlink" title="導入方法"></a>導入方法</h2><p>まず、TypeScriptとReactをインストールする。<br>※TypeScriptは2.x系のバージョンがベータ版としてリリースされているので、そちらを使うのであればtypingsは不要。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm i -S typescript react typings</div></pre></td></tr></table></figure>
+<p>次にReactの型定義ファイルを取得します</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(npm bin)/typings install -S react</div><div class="line"><span class="comment"># TypeScript@2の場合は npm install -D @types/react</span></div></pre></td></tr></table></figure>
+<p>これで準備は完了。</p>
+<h2 id="コンポーネントの定義"><a href="#コンポーネントの定義" class="headerlink" title="コンポーネントの定義"></a>コンポーネントの定義</h2><p>それでは実際にコンポーネントを定義する。<br>ReactにはReactComponentと、StatelessComponentという2種のコンポーネント型がある。</p>
+<p>ReactComponentは、一般的なReactのコンポーネントで、React.Componentを継承して定義するコンポーネント。<br>StatelessComponentは、関数として定義できるコンポーネントで、(当然だが)ライフサイクルメソッド、Stateを持たない。<br>Viewにロジックが入り込む余地をなくすことができるので、私は特に理由がない限りこちらのコンポーネントを使うようにしている。</p>
+<p>さて、ReactComponentとStatelessComponentのコンポーネント定義例を作成する前に、それぞれの型定義を確認したい。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">// ReactComponent</div><div class="line">class Component&lt;P, S&gt; implements ComponentLifecycle&lt;P, S&gt; &#123;</div><div class="line">  constructor(props?: P, context?: any);</div><div class="line">  setState(f: (prevState: S, props: P) =&gt; S, callback?: () =&gt; any): void;</div><div class="line">  setState(state: S, callback?: () =&gt; any): void;</div><div class="line">  forceUpdate(callBack?: () =&gt; any): void;</div><div class="line">  render(): ReactElement&lt;any&gt;;</div><div class="line">  </div><div class="line">  props: P &amp; &#123; children?: ReactNode &#125;;</div><div class="line">  state: S;</div><div class="line">  context: &#123;&#125;;</div><div class="line">  refs: &#123;</div><div class="line">    [key: string]: ReactInstance</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">// StatelessComponent</div><div class="line">interface StatelessComponent&lt;P&gt; &#123;</div><div class="line">  (props?: P, context?: any): ReactElement&lt;any&gt;;</div><div class="line">  propTypes?: ValidationMap&lt;P&gt;;</div><div class="line">  contextTypes?: ValidationMap&lt;any&gt;;</div><div class="line">  defaultProps?: P;</div><div class="line">  displayName?: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ReactComponentは<code>P</code>,<code>S</code>、StatelessComponentは<code>P</code>という型変数を受け取ることに注目したい。<br>これはPropsとStateを表す型変数で、それぞれコンポーネントのPropsとStateに受け取れる型を定義できる。<br>※余談だが、コンポーネント階層に暗黙に流れていくcontextというオブジェクトもあるが、こちらはany型になっている。</p>
+<p>つまり、PropTypesで実行時に検証していたPropsの型を、TypeScriptのジェネリクス機能によって、静的に解析・検証ができるというだ。<br>これによって、Model(Store)レイヤーで定義したインターフェースに変更があった場合でも、アプリケーションを実行することなく変更を検出・コンポーネントの定義を変更でき、非常に快適なコンポーネント作成を行うことができる。</p>
+<h2 id="作例"><a href="#作例" class="headerlink" title="作例"></a>作例</h2><p>では実際にコンポーネントの作例を書いてみたい。<br>例によってTodoアプリケーションを想定して、ごく簡単なTodoリストを描画したいとする。<br>(なお、JSX記法を用いて仮想DOMを定義しているので、拡張子を*.tsxとしている)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">import &#123; StatelessComponent, Component &#125; from "react";</div><div class="line">  </div><div class="line">// Propsの型を定義する</div><div class="line">interface ITodo &#123;</div><div class="line">  label: string;</div><div class="line">  isCompleted: boolean;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">interface ITodos &#123;</div><div class="line">  todos: ITodo[];</div><div class="line">&#125;</div><div class="line">  </div><div class="line">// StatelessComponentの型引数に上で定義した型を渡す</div><div class="line">const Todo: StatelessComponent&lt;ITodos&gt; = (&#123; label, isCompleted &#125;) =&gt; (</div><div class="line">  &lt;li className=&#123; isCompleted ? "Todo--is-complete" : "Todo" &#125;&gt;&#123; label &#125;&lt;/li&gt;</div><div class="line">);</div><div class="line">  </div><div class="line">const Todos: StatelessComponent&lt;ITodoProps&gt; = (&#123; todos &#125;) =&gt; (</div><div class="line">  &lt;ul&gt;</div><div class="line">    &#123;todos.map(todo =&gt; &lt;Todo &#123; ...todo &#125;/&gt;)&#125;</div><div class="line">  &lt;/ul&gt;</div><div class="line">);</div><div class="line">  </div><div class="line">// ReactComponentとして定義するなら...</div><div class="line">class Todo extends Component&lt;ITodos, void&gt; &#123;</div><div class="line">  render() &#123;</div><div class="line">    const &#123; label, isCompleted &#125; = this.props;</div><div class="line">    return &lt;li className=&#123; isCompleted ? "Todo--is-complete" : "Todo" &#125;&gt;&#123; label &#125;&lt;/li&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">class Todos extends Component&lt;ITodos, void&gt; &#123;</div><div class="line">  render() &#123;</div><div class="line">    const &#123; todos &#125; = this.props;</div><div class="line">    return (</div><div class="line">      &lt;ul&gt;</div><div class="line">        &#123;todos.map(todo =&gt; &lt;Todo &#123; ...todo &#125;/&gt;)&#125;</div><div class="line">      &lt;/ul&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>この作例では必要なかったが、React.Componentの第二型引数に渡した型で、this.stateの型も定義できる。<br>※個人的にはそもそもコンポーネント内部でStateを操作しないケースの方が多いと感じているが、アプリケーションのサイズに依存するだろう</p>
+<p>以上で型安全な子コンポーネントが作成できた。<br>これらのコンポーネントの親となるルートコンポーネントでルートStateを購読し、下層のコンポーネントに流してあげることで、アプリケーションのViewとしての定義が完成する。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">class</span> RootComponent <span class="keyword">extends</span> Component&lt;<span class="built_in">void</span>, ITodos&gt; &#123;</div><div class="line">  componentWillMount() &#123;</div><div class="line">    rootModel.subscribe(<span class="function"><span class="params">state</span> =&gt;</span> <span class="keyword">this</span>.setState(state));</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> &lt;Todos &#123; ...this.state &#125; /&gt;;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>以上、TypeScriptでReactコンポーネントを作成することで型安全なコンポーネントを定義する方法を紹介してみた。<br>参考になればうれしい。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reactjs/">reactjs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typescript/">typescript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/25/create-golip/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/06/04/2015-06-04-behavior-of-object-assign/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          object-assignの挙動について勘違いしていたこと
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Scalaに入門した | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="最近、サーバのコードを一から書いてみたいと思ってScalaに入門した。
+書いてみたいというか、Node.jsでならいくつか書いてみたことはあるんだけど、データストレージにMongoDBを使ってたりしてあんまり一般的な構成でない気がしていた。(PostgreSQL  Express  ReactSSRとか試したりはしてた)一般的な構成というならRubyとかJavaをやっておけという話かも知れないが、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scalaに入門した">
+<meta property="og:url" content="https://kogai.github.io/2016/09/29/newbie-of-scala/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="最近、サーバのコードを一から書いてみたいと思ってScalaに入門した。
+書いてみたいというか、Node.jsでならいくつか書いてみたことはあるんだけど、データストレージにMongoDBを使ってたりしてあんまり一般的な構成でない気がしていた。(PostgreSQL  Express  ReactSSRとか試したりはしてた)一般的な構成というならRubyとかJavaをやっておけという話かも知れないが、">
+<meta property="og:updated_time" content="2017-03-22T04:40:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scalaに入門した">
+<meta name="twitter:description" content="最近、サーバのコードを一から書いてみたいと思ってScalaに入門した。
+書いてみたいというか、Node.jsでならいくつか書いてみたことはあるんだけど、データストレージにMongoDBを使ってたりしてあんまり一般的な構成でない気がしていた。(PostgreSQL  Express  ReactSSRとか試したりはしてた)一般的な構成というならRubyとかJavaをやっておけという話かも知れないが、">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-newbie-of-scala" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/09/29/newbie-of-scala/" class="article-date">
+  <time datetime="2016-09-28T23:02:27.000Z" itemprop="datePublished">2016-09-29</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Scalaに入門した
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/09/29/newbie-of-scala/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/09/29/newbie-of-scala/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>最近、サーバのコードを一から書いてみたいと思ってScalaに入門した。</p>
+<p>書いてみたいというか、Node.jsでならいくつか書いてみたことはあるんだけど、データストレージにMongoDBを使ってたりしてあんまり一般的な構成でない気がしていた。(PostgreSQL <em> Express </em> ReactSSRとか試したりはしてた)<br>一般的な構成というならRubyとかJavaをやっておけという話かも知れないが、静的型付けで関数型っぽく書ける言語で書きたいと思っていたので、Scalaを選んだ。<br>(Haskellで書ければ話が早いんだけどどうにも難しい…)</p>
+<p>1年くらい前にScalaの文法入門本を買っていて、Kindleの肥やしになっていたからというのや、『PHPからScalaに乗り換えたチャットワークさん、その後どうですか？』<a href="http://hrnabi.com/2016/08/19/11748/" target="_blank" rel="external">前編</a> / <a href="http://hrnabi.com/2016/08/22/11752/" target="_blank" rel="external">後編</a>でScalaの話がTLに上がってきたからというのもある。</p>
+<h3 id="入門の手順"><a href="#入門の手順" class="headerlink" title="入門の手順"></a>入門の手順</h3><p>ざっと入門した手順としては、</p>
+<h5 id="Guide-to-ScalaーScalaプログラミング入門"><a href="#Guide-to-ScalaーScalaプログラミング入門" class="headerlink" title="Guide to ScalaーScalaプログラミング入門 "></a><a href="http://amzn.to/2cCZ4Ri" target="_blank" rel="external">Guide to ScalaーScalaプログラミング入門 </a></h5><p>で大体の文法を把握して、</p>
+<h5 id="Guide-to-Play2-Scala"><a href="#Guide-to-Play2-Scala" class="headerlink" title="Guide to Play2 Scala "></a><a href="http://amzn.to/2daVtr4" target="_blank" rel="external">Guide to Play2 Scala </a></h5><p>でメジャー（っぽい）フレームワークの概要を把握しつつ、実際にWebアプリケーションを作ってみている。</p>
+<h5 id="Scala関数型デザイン-amp-プログラミング―Scalazコントリビューターによる関数型徹底ガイド"><a href="#Scala関数型デザイン-amp-プログラミング―Scalazコントリビューターによる関数型徹底ガイド" class="headerlink" title="Scala関数型デザイン&amp;プログラミング―Scalazコントリビューターによる関数型徹底ガイド"></a><a href="http://amzn.to/2daVyem" target="_blank" rel="external">Scala関数型デザイン&amp;プログラミング―Scalazコントリビューターによる関数型徹底ガイド</a></h5><p>も併せて読んでいるけど、これがとても良かった。<br><a href="http://amzn.to/2cCZ7g0" target="_blank" rel="external">すごいHaskellたのしく学ぼう！</a>で出てくるような概念を、練習問題付きでもう一度学習し直せる感じ。</p>
+<p>あと、コップ本こと<a href="http://amzn.to/2dfOeOU" target="_blank" rel="external">Scalaスケーラブルプログラミング第3版</a>が必読書として挙がっているのをよく見かけるので読みたいけど、電子版はPDFしか無いんですね…<br>KindleでPDF版読むのツラいので、epub/mobiで出して欲しい。</p>
+<h3 id="エディタ"><a href="#エディタ" class="headerlink" title="エディタ"></a>エディタ</h3><p>せっかくAltJavaに入門するので、ついでに本格的なIDEにも入門してみた。<br>あわよくばWebStorm(というかTypeScript)にも乗り換えられるかもと思って、IntelliJ IDEAを使っている。<br>無償版のコミュニティビルドでは、Playのテンプレートが解析対象外だったりして悲しかったが、今のところは有償版の無償期間内で機能を試している感じだ。</p>
+<p>使ってみると、さすがIDEといった使いやすさで、雰囲気で何となく生えているメソッドが分かったり、型推論の結果をホバー表示してくれたりというあたりが高速で、初心者に優しいなと思う。</p>
+<p>課金しても良い気はしているが、仕事で書いているTypeScriptの型推論が無い(というか、推論した結果を見る手段が弱い)のと、メソッド候補とかの推薦がScalaに較べるとだいぶ遅くて(ここらへんWebStormでも事情は同じだと思うんだけど)、VisualStudioCodeに軍配が上がっていると思っているので、自分を説得出来ないかも知れない。</p>
+<p>それでもAdobeのCCとかに較べると心理的な障壁は下がりそうではあるけど…</p>
+<h3 id="所感"><a href="#所感" class="headerlink" title="所感"></a>所感</h3><p>入門したばかりでまだ大したコードを書いていないけど、今のところここが嫌、みたいなところはない。<br>ただ、Haskellでもそうだったけど関数名に記号が許されているので、ちょっと混乱する時はある<br>(とは言え型定義にジャンプすれば事足りるし、混乱するのは初見の時だけだろうとも思っているけど)</p>
+<p>あと、Playフレームワークは旧バージョンのチュートリアルコンテンツにあたってしまうことが結構あって(前述の<a href="http://amzn.to/2daVtr4" target="_blank" rel="external">Guide to Play2 Scala </a>も結構前のバージョンの解説本らしい)、適宜変換していかないといけないところはあった。<br>まぁどのフレームワークでもその辺は同じか。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/09/29/newbie-of-scala/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/09/29/newbie-of-scala/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Play/">Play</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Scala/">Scala</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/11/30/sample-redux-observable/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Reactとredux-Observableでショッピングカートアプリを作ってみる話
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/10/create-custom-operator/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          RxJSのカスタムオペレータを作った
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

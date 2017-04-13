@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>git-diffで差分ファイルのみをarchive.zipにする | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="やりたいこと
+クライアント案件で、本番サーバーへのアクセス権がない。
+更新作業の際には差分ファイルのみを納品するように要求されている。
+
+git archiveで差分抽出git archiveコマンドで、前回納品時とのdiffを抽出してzip化する
+1git archive --format=zip HEAD `git diff master --name-only` -o archive.zip">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git-diffで差分ファイルのみをarchive.zipにする">
+<meta property="og:url" content="https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="やりたいこと
+クライアント案件で、本番サーバーへのアクセス権がない。
+更新作業の際には差分ファイルのみを納品するように要求されている。
+
+git archiveで差分抽出git archiveコマンドで、前回納品時とのdiffを抽出してzip化する
+1git archive --format=zip HEAD `git diff master --name-only` -o archive.zip">
+<meta property="og:updated_time" content="2017-03-22T04:40:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git-diffで差分ファイルのみをarchive.zipにする">
+<meta name="twitter:description" content="やりたいこと
+クライアント案件で、本番サーバーへのアクセス権がない。
+更新作業の際には差分ファイルのみを納品するように要求されている。
+
+git archiveで差分抽出git archiveコマンドで、前回納品時とのdiffを抽出してzip化する
+1git archive --format=zip HEAD `git diff master --name-only` -o archive.zip">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-2015-03-17-git-diff-and-archive" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/03/17/2015-03-17-git-diff-and-archive/" class="article-date">
+  <time datetime="2015-03-16T15:00:00.000Z" itemprop="datePublished">2015-03-17</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      git-diffで差分ファイルのみをarchive.zipにする
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<h2 id="やりたいこと"><a href="#やりたいこと" class="headerlink" title="やりたいこと"></a>やりたいこと</h2><ul>
+<li>クライアント案件で、本番サーバーへのアクセス権がない。</li>
+<li>更新作業の際には差分ファイルのみを納品するように要求されている。</li>
+</ul>
+<h2 id="git-archiveで差分抽出"><a href="#git-archiveで差分抽出" class="headerlink" title="git archiveで差分抽出"></a>git archiveで差分抽出</h2><p><code>git archive</code>コマンドで、前回納品時との<code>diff</code>を抽出して<code>zip</code>化する</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git archive --format=zip HEAD `git diff master --name-only` -o archive.zip</div></pre></td></tr></table></figure>
+<p><code>git diff</code>で<code>master</code>ブランチ(前回納品時の状態を想定)との差分ファイルリストを取得して、<code>git archive</code>に渡してあげる。<br>これでアーカイブ化できました。</p>
+<h2 id="–diff-filterを使う"><a href="#–diff-filterを使う" class="headerlink" title="–diff-filterを使う"></a>–diff-filterを使う</h2><p>上記の手法だと差分の中に削除したファイルも含まれてしまい、以下のエラーメッセージが出ます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fatal: pathspec &apos;path/to/not/exist/file&apos; did not match any files</div></pre></td></tr></table></figure>
+<p>削除したファイルは<code>git archive</code>対象のリストに渡らないようにすれば良さそうです。<br><a href="http://git-scm.com/docs/git-diff" target="_blank" rel="external">公式ドキュメントのgit-diffのページ</a>を見ると、<code>--diff-filter</code>というオプションがありました。</p>
+<blockquote>
+<p>Select only files that are Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R)</p>
+</blockquote>
+<p>このオプションを使って追加したファイル(A)と編集したファイル(M)だけにフィルタリングされたリストが作れそうです。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git archive --format=zip HEAD `git diff master --name-only --diff-filter=AM` -o archive.zip</div></pre></td></tr></table></figure>
+<p>これでOK。<br>困ったときは公式ドキュメントに限りますね。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/19/2015-03-19-modify-yml/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          circleCIのテストがnodev0.12で失敗する
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/12/2015-03-12-greeting/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          HEXOに移行することにした
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>RxJSのカスタムオペレータを作った | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="最近RxJSを使って状態の遷移を表現するような設計でアプリケーションを作っていた。
+ReduxをはじめとするFlux由来のライブラリをいくつか試してみたが、どうもreducerの役割をうまく扱いきれなかったり(凝集を疎にしてしまっているように思えてならなかったり…理解が浅いだけかも知れませんが)、非同期処理間に複数の依存関係が生じるような要件が提示されていたので(例えばある要素をクリックするとAP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJSのカスタムオペレータを作った">
+<meta property="og:url" content="https://kogai.github.io/2016/09/10/create-custom-operator/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="最近RxJSを使って状態の遷移を表現するような設計でアプリケーションを作っていた。
+ReduxをはじめとするFlux由来のライブラリをいくつか試してみたが、どうもreducerの役割をうまく扱いきれなかったり(凝集を疎にしてしまっているように思えてならなかったり…理解が浅いだけかも知れませんが)、非同期処理間に複数の依存関係が生じるような要件が提示されていたので(例えばある要素をクリックするとAP">
+<meta property="og:updated_time" content="2017-04-13T12:16:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJSのカスタムオペレータを作った">
+<meta name="twitter:description" content="最近RxJSを使って状態の遷移を表現するような設計でアプリケーションを作っていた。
+ReduxをはじめとするFlux由来のライブラリをいくつか試してみたが、どうもreducerの役割をうまく扱いきれなかったり(凝集を疎にしてしまっているように思えてならなかったり…理解が浅いだけかも知れませんが)、非同期処理間に複数の依存関係が生じるような要件が提示されていたので(例えばある要素をクリックするとAP">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-create-custom-operator" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/09/10/create-custom-operator/" class="article-date">
+  <time datetime="2016-09-10T08:09:40.000Z" itemprop="datePublished">2016-09-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      RxJSのカスタムオペレータを作った
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/09/10/create-custom-operator/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/09/10/create-custom-operator/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>最近RxJSを使って状態の遷移を表現するような設計でアプリケーションを作っていた。</p>
+<p>ReduxをはじめとするFlux由来のライブラリをいくつか試してみたが、どうもreducerの役割をうまく扱いきれなかったり(凝集を疎にしてしまっているように思えてならなかったり…理解が浅いだけかも知れませんが)、非同期処理間に複数の依存関係が生じるような要件が提示されていたので(例えばある要素をクリックするとAPIリクエストが走り、そのレスポンスから別の要素のクリック・APIリクエストが可能になる、といった具合)、ReactiveProgramming的な考え方で作るのが最もフィットすると考えたからだ。</p>
+<p>最初は入力の起点毎にSubjectを作成して、各DOM要素にsubject.nextを紐付けるようなやり方をしていたのだが、ちょっと冗長というか無駄だと思う。<br>Reduxっぽく、単一のdispatcher関数に、ユーザの関心事の種類を表す情報(ActionType)を載せて分岐するようにした方が、スマートだろう。<br><a href="https://github.com/redux-observable/redux-observable" target="_blank" rel="external">redux-observable</a>なんかのソースコードを読んでいると<a href="https://github.com/redux-observable/redux-observable/blob/master/src/createEpicMiddleware.js#L17" target="_blank" rel="external">createEpicMiddleware</a>あたりでそういうアプローチを取っているように読み取った。</p>
+<p>※Twitterで教えて頂いたが、<a href="https://github.com/bouzuya/b-o-a" target="_blank" rel="external">boajs</a>も同様のアプローチを取っているそうで、<a href="https://github.com/bouzuya/boa-core/blob/master/src/run.ts#L7" target="_blank" rel="external">このあたり</a>のことかなと読み取った(間違っていたらすいません)</p>
+<p>で、このアプローチを取ると、共有しているsubject由来のストリームにフィルタをかけるような処理を頻繁に書くようになる。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> subject = <span class="keyword">new</span> Subject&lt;any&gt;();</div><div class="line"><span class="keyword">const</span> action$ = subject.asObservable();</div><div class="line">  </div><div class="line">action$ <span class="comment">// subject由来のストリーム</span></div><div class="line">  .filter(<span class="function"><span class="params">action</span> =&gt;</span> action.type === <span class="string">"SOME_ACTION_TYPE"</span>);</div></pre></td></tr></table></figure>
+<p>できればいわゆるアクションにはこういう型を期待して、</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">interface Action&lt;T&gt; &#123;</div><div class="line">  <span class="attr">type</span>: string;</div><div class="line">  payload?: T;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>こんな風にアクションのペイロードを引き出せるとうれしい</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">action$ <span class="comment">// subject由来のストリーム</span></div><div class="line">  .ofType(<span class="string">"SOME_ACTION_TYPE"</span>);</div><div class="line"><span class="comment">// =&gt; Observable&lt;Payload&gt;</span></div></pre></td></tr></table></figure>
+<p>RxJS(というかたぶんRx系ライブラリはみんなそうだろうが)には、ライブラリのユーザがオペレータを拡張できるようになっていて、<a href="https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md" target="_blank" rel="external">ガイドライン</a>も用意されている。</p>
+<p>いたずらにオペレータを増やすのはきな臭い予感しかしないが、ここぞという場面で使えばコードのリーダビリティと凝集度に大いに貢献してくれそうだ。<br><a href="https://www.manning.com/books/functional-reactive-programming" target="_blank" rel="external">Functional Reactive Programming</a>には、そもそもRP系ライブラリで提供されるオペレータは、10個のプリミティブなオペレータの組み合わせによる拡張に過ぎない、みたいな話もあった。</p>
+<p>さて、実はこのofTypeオペレータは<a href="https://github.com/redux-observable/redux-observable/blob/master/src/ActionsObservable.js" target="_blank" rel="external">redux-observableの内部</a>で実装されているものなのだった。<br>ただ、上述のようにことさらredux-observableを用いていないアプリケーションであっても、RxJSにFlux的なエッセンスを加えて構成する場合にとても有用なオペレータだ。<br>そこで、このオペレータに着想を得て(少しインターフェースを変えている)似たようなオペレータを作成・npmに公開した。</p>
+<p><a href="https://github.com/kogai/of-type-operator" target="_blank" rel="external">of-type-operator</a></p>
+<p><a href="https://github.com/kogai/of-type-operator/blob/master/dist/index.d.ts" target="_blank" rel="external">型定義</a>にあるように、</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;T&gt;(actionType: string, pickBy?: PickByFunction): Observable&lt;T&gt;</div></pre></td></tr></table></figure>
+<p>という感じだ。<br>redux-observableとは、複数のアクションタイプを受け取れない代わりに、project関数を受け取って、返す<code>Observable&lt;Result&gt;</code>を操作できるようにしている。<br>例えばこういう感じのアクションを定義している時もあるだろうという想定だ</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">interface Action &#123;</div><div class="line">  <span class="attr">type</span>: string;</div><div class="line">  userName: string;</div><div class="line">  userMail: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>作ってみてObservableへの理解は多少深まったような気がする。<br>特にオペレータの、Subscriberの子クラスをsubscribeのチェーンにつなげてliftする、みたいな基本的な構造を読むことになったのが良かった。</p>
+<p>ところで、RxJSのコードを眺めた後に『すごいHaskellたのしく学ぼう！』を再読してて、liftについて触れている箇所があることに気付いた時は興奮した。<br>関数の持ち上げ以外にも、Haskellに入門した時に触れた概念でRxへの理解がだいぶ進んだところがあるように思う。IOアクションとか。</p>
+<p>というわけで、よかったら使ってみてください。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/09/10/create-custom-operator/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/09/10/create-custom-operator/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/npm/">npm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typescript/">typescript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/作ったもの/">作ったもの</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/29/newbie-of-scala/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Scalaに入門した
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/25/create-golip/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

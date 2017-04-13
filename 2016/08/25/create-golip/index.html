@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="もう1年近く前の話だが、Golangでテキストファイルの中身をクリップボードにコピーするコマンドラインツールを作っていたのだった。
+golip
+最終コミットが2015年末になっている。。。作りっぱなしのまま放置していたけど、せっかく作ったことだし個人的には常用しているツールでもあるので制作物の記録として残しておく。
+どんなツール？任意のマークダウンファイルをテンプレートとして保存しておき、コマンド">
+<meta property="og:type" content="article">
+<meta property="og:title" content="テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った">
+<meta property="og:url" content="https://kogai.github.io/2016/08/25/create-golip/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="もう1年近く前の話だが、Golangでテキストファイルの中身をクリップボードにコピーするコマンドラインツールを作っていたのだった。
+golip
+最終コミットが2015年末になっている。。。作りっぱなしのまま放置していたけど、せっかく作ったことだし個人的には常用しているツールでもあるので制作物の記録として残しておく。
+どんなツール？任意のマークダウンファイルをテンプレートとして保存しておき、コマンド">
+<meta property="og:updated_time" content="2017-03-22T04:40:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った">
+<meta name="twitter:description" content="もう1年近く前の話だが、Golangでテキストファイルの中身をクリップボードにコピーするコマンドラインツールを作っていたのだった。
+golip
+最終コミットが2015年末になっている。。。作りっぱなしのまま放置していたけど、せっかく作ったことだし個人的には常用しているツールでもあるので制作物の記録として残しておく。
+どんなツール？任意のマークダウンファイルをテンプレートとして保存しておき、コマンド">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-create-golip" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/08/25/create-golip/" class="article-date">
+  <time datetime="2016-08-25T12:58:37.000Z" itemprop="datePublished">2016-08-25</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/08/25/create-golip/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/08/25/create-golip/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>もう1年近く前の話だが、Golangでテキストファイルの中身をクリップボードにコピーするコマンドラインツールを作っていたのだった。</p>
+<p><a href="https://github.com/kogai/golip" target="_blank" rel="external">golip</a></p>
+<p>最終コミットが2015年末になっている。。。<br>作りっぱなしのまま放置していたけど、せっかく作ったことだし個人的には常用しているツールでもあるので制作物の記録として残しておく。</p>
+<h2 id="どんなツール？"><a href="#どんなツール？" class="headerlink" title="どんなツール？"></a>どんなツール？</h2><p>任意のマークダウンファイルをテンプレートとして保存しておき、コマンドラインからクリップボードにファイルの中身をコピーできるツール。<br>よく使う定型文なんかを保存しておいて、コマンド一発でペーストできる、みたいな使い方をする。</p>
+<p>例えば</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="section">## ベースとなるテンプレートファイル</span></div><div class="line"></div><div class="line">マークダウン形式で用意しておく</div></pre></td></tr></table></figure>
+<p>こんな感じで、マークダウン形式のファイルを用意しておき、</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">golip add [path/to/template-file.md]</div></pre></td></tr></table></figure>
+<p>用意したファイルへのパスを引数にして、コマンドを実行しておくと</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">golip copy template-file</div></pre></td></tr></table></figure>
+<p>こんなコマンドで、テンプレートファイルの中身が、クリップボードにコピーされる。<br>という、ごく簡単なツール。</p>
+<h2 id="なぜ作ったのか"><a href="#なぜ作ったのか" class="headerlink" title="なぜ作ったのか"></a>なぜ作ったのか</h2><p>仕事で、定型文のテンプレートををベースにPRやコードレビューを書くことになっているのだが、毎度雛形をコピー&amp;ペーストするのが面倒だったので。<br>制作当時、Githubのテンプレート機能(<code>.github/</code>以下に定型文のテンプレートを置いておくと、定型文の雛形として使えるやつ)は無かったので、自作してみた。</p>
+<p>機能としてはありふれているので、探せばこの辺の機能を満たして余りあるようなツールが見つかっただろうと思う。<br>もう一つの理由として、当時Golangに入門したばかりで、習熟のための小さなツールを作りたかったというのもあった。</p>
+<p>結果として、非常に小さな実装(150行くらい)ながらも、GolangでCLIを作る時の基礎を体得できたのでよかった。<br>冒頭でも少し触れたが、Githubにテンプレート機能ができた今でも常用している。<br>Githubのテンプレートはレポジトリ毎に共通だったり、特定のアクションに対して特定のテンプレートが必ず適用さたりと、若干使いでがよくないと感じてしまうシーンがあるので…<br>情が移っているだけという話でもあるが。</p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>実際に自分が使えるような、小さなツールを作ってみて言語の習熟度を上げるというのは、学習方法として結構良かったように思う。<br>小さくとも、定形の簡易アプリ(普段仕事で書いているフロントエンド界隈ではTODOアプリを作ってみるというのが定番になっている)を作るより、否応なく自分が認識していなかったその言語のイディオムに触れざるを得ないので、より実践的に習熟度を上げれるような気がする。<br>もっとも、適切なサイズのツールのアイディアがそういつも思いつくとは限らないが。。。</p>
+<p>よかったら使ってみて下さい。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/08/25/create-golip/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/08/25/create-golip/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/作ったもの/">作ったもの</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/10/create-custom-operator/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RxJSのカスタムオペレータを作った
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          TypeScript✕ReactJSで型安全なComponentを手に入れる
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

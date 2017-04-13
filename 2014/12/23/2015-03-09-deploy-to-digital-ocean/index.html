@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>DigitalOceanでNode.jsのサーバーを立てる初期設定メモ | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="ターミナルからログイン1ssh root@IP
+
+Ubuntu版12345sudo apt-get updatesudo apt-get install nodejssudo apt-get install npmsudo apt-get install gitnpm install -g bower
+
+CentOS版12345yum updatecurl -sL https://rpm.node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DigitalOceanでNode.jsのサーバーを立てる初期設定メモ">
+<meta property="og:url" content="https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="ターミナルからログイン1ssh root@IP
+
+Ubuntu版12345sudo apt-get updatesudo apt-get install nodejssudo apt-get install npmsudo apt-get install gitnpm install -g bower
+
+CentOS版12345yum updatecurl -sL https://rpm.node">
+<meta property="og:updated_time" content="2017-03-22T04:40:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DigitalOceanでNode.jsのサーバーを立てる初期設定メモ">
+<meta name="twitter:description" content="ターミナルからログイン1ssh root@IP
+
+Ubuntu版12345sudo apt-get updatesudo apt-get install nodejssudo apt-get install npmsudo apt-get install gitnpm install -g bower
+
+CentOS版12345yum updatecurl -sL https://rpm.node">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-2015-03-09-deploy-to-digital-ocean" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/12/23/2015-03-09-deploy-to-digital-ocean/" class="article-date">
+  <time datetime="2014-12-23T02:58:02.000Z" itemprop="datePublished">2014-12-23</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      DigitalOceanでNode.jsのサーバーを立てる初期設定メモ
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<h2 id="ターミナルからログイン"><a href="#ターミナルからログイン" class="headerlink" title="ターミナルからログイン"></a>ターミナルからログイン</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh root@IP</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="Ubuntu版"><a href="#Ubuntu版" class="headerlink" title="Ubuntu版"></a>Ubuntu版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install nodejs</div><div class="line">sudo apt-get install npm</div><div class="line">sudo apt-get install git</div><div class="line">npm install -g bower</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="CentOS版"><a href="#CentOS版" class="headerlink" title="CentOS版"></a>CentOS版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">yum update</div><div class="line">curl -sL https://rpm.nodesource.com/setup | bash -</div><div class="line">yum install -y nodejs</div><div class="line">yum install git</div><div class="line">npm install -g bower</div></pre></td></tr></table></figure>
+<h3 id="gitデプロイつなぎ込み"><a href="#gitデプロイつなぎ込み" class="headerlink" title="gitデプロイつなぎ込み"></a>gitデプロイつなぎ込み</h3><p><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-automatic-deployment-with-git-with-a-vps" target="_blank" rel="external">解説記事</a></p>
+<ol>
+<li><code>/var/repo/site.git/</code> を作成して <code>git init —bare</code></li>
+<li><code>/var/repo/site.git/hooks/</code> へ移動</li>
+<li><code>cat &gt; post-receive</code> で<code>post-receive</code>ファイルを作成</li>
+<li><p><code>vim</code>モードにするなどして以下記入<code>:x</code>で保存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">git --work-tree=/var/www/ディレクトリ名 --git-dir=/var/repo/site.git checkout <span class="_">-f</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>chmod +x post-receive</code></p>
+</li>
+<li><p>ローカルレポジトリにgitパスをつなぎ込み</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote add product ssh://root@IP/var/repo/site.git</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>SSHキー</code>の登録（新規アカウント作成時のみ）</p>
+</li>
+<li><p>プッシュしてデプロイ</p>
+</li>
+</ol>
+<h3 id="サーバー永続化"><a href="#サーバー永続化" class="headerlink" title="サーバー永続化"></a>サーバー永続化</h3><p><code>npm</code>の<code>pm2</code>をインストール<br><code>pm2 start app.js</code> でサーバー永続化</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/digitalocean/">digitalocean</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2015/02/12/2015-03-09-tails-about-published-grunt-plugin/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Gruntのプラグインを作って公開してみた
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/09/25/2015-03-09-irkitjs/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          IRKitをAndroidでも初期設定・操作が出来るWebアプリ「IRKitjs」を作った
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>タイトル未定(仮)</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://kogai.github.io/"/>
+  <updated>2017-03-22T04:40:29.000Z</updated>
+  <id>https://kogai.github.io/</id>
+  
+  <author>
+    <name>Shinichi Kogai</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>正規表現をダイアグラムとして表示するVSCodeの拡張機能を作った</title>
+    <link href="https://kogai.github.io/2016/12/22/made-vscode-extension/"/>
+    <id>https://kogai.github.io/2016/12/22/made-vscode-extension/</id>
+    <published>2016-12-22T10:31:47.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>半年くらい前に作業用のエディタをAtomからVSCodeに切り替えた。<br>TypeScriptに最適化されていてとても快適なんだけど、Atomで常用していたあるプラグインの代替となる拡張機能が無かった。</p>
+<p><a href="https://github.com/klorenz/atom-regex-railroad-diagrams" target="_blank" rel="external">atom-regex-railroad-diagrams</a>というプラグインで、正規表現をダイアグラムとして表示してくれるというもの。<br>かなしいことに私は正規表現が苦手で、書いたパターンが実際にどんな文字列にマッチするのかイマイチイメージできないのだが、このプラグインを使うと視覚的にわかりやすい形で書いたパターンを確認できていた。</p>
+<p>VSCodeに移行してからも、正規表現を書くときだけAtomを起動してダイアグラムを確認するような生活を送っていたのだが、それもかなしいのでVSCode向けに同じような機能を持った拡張機能を作ってみることにした。</p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=kogai.regex-railroad-diagrams" target="_blank" rel="external">vscode-regex-railroad-diagrams</a></p>
+<p>同じElectronベースのエディタということで中核となる実装はほとんどそのまま流用しつつ、VSCodeとの橋渡しに成るインタフェースを作った感じだ。<br>作ってみて思ったのが、同じElectronベースのエディタとはいえ、結構APIに違いがあるようだった。</p>
+<p>特にAtomは直接プラグインのコードでDOM要素に手を触れることができるようだが、VSCodeではそういったインタフェースはないようで、特定のライフサイクルの時に呼ばれる関数にHTMLとして評価できる文字列を渡すことで細かくスタイリングしたHTML要素を描画した。<br>あと、Atomでは正規表現部分を囲むCSSクラスがあるので正規表現を表す文字列を簡単に取得できていたのだが、VSCodeではそういう風にはなっていなかったので、正規表現部分を抽出するコードを書く必要があった。</p>
+<p>Atomだとこういう感じ</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"string regexp js"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"punctuation definition string begin js"</span>&gt;</span>/<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">  foo</div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"punctuation definition string end js"</span>&gt;</span>/<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>VSCodeだとこういう感じ</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"token meta var expr js string regex punctuation definition begin"</span>&gt;</span>/<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"token meta var expr js string regex"</span>&gt;</span>foo<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"token meta var expr js string regex punctuation definition end"</span>&gt;</span>/<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>動かしてみたところはこんな感じ。</p>
+<p>Cmd + Shift + P から <code>Show RegExp preview</code>コマンドを打つ<br><img src="/images/made-vscode-extension/command.png" alt=""></p>
+<p>こんな感じでダイアグラムが表示される<br><img src="/images/made-vscode-extension/diagram.png" alt=""></p>
+<p>よかったら使ってみて下さい。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;半年くらい前に作業用のエディタをAtomからVSCodeに切り替えた。&lt;br&gt;TypeScriptに最適化されていてとても快適なんだけど、Atomで常用していたあるプラグインの代替となる拡張機能が無かった。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.co
+    
+    </summary>
+    
+    
+      <category term="TypeScript" scheme="https://kogai.github.io/tags/TypeScript/"/>
+    
+      <category term="VSCode" scheme="https://kogai.github.io/tags/VSCode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TypeScript製ライブラリのテストフレームワークをmochaからtapeに切り替えた</title>
+    <link href="https://kogai.github.io/2016/12/15/mocha-to-tape/"/>
+    <id>https://kogai.github.io/2016/12/15/mocha-to-tape/</id>
+    <published>2016-12-15T03:35:04.000Z</published>
+    <updated>2017-04-13T12:15:43.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>普段テストは、Node.jsのコードはmocha・ブラウザ向けのコードはkarma(jasmine)で書くことが多いんだけど、たまには別のライブラリも試してみたいな〜と思ってたところにこの記事を読んだ</p>
+<p><a href="https://medium.com/javascript-scene/why-i-use-tape-instead-of-mocha-so-should-you-6aa105d8eaf4#.yaaii9wua" target="_blank" rel="external">Why I use Tape Instead of Mocha &amp; So Should You</a></p>
+<p>1年半くらい前の記事で、要約すると設定ファイル不要でグローバルな変数やテスト間で共有される変数を持たないシンプルなテストフレームワークなのでMochaよりtapeに乗り換えた、テストは極力複雑にならないようにして(その方がデバッグも容易、みたいな文脈もある気がする)もっとプロダクトの質に注力しよう、みたいな感じか。<br>テストフレームワークやらランナーやらの設定でごちゃごちゃなってるなというのは、前々から感じていたことではあったので、自分で公開している小さなライブラリのmochaを使って書いていたテストコードをtapeに切り替えてみた。<br>前に書いた<a href="https://kogai.github.io/2016/09/10/create-custom-operator/">このポスト</a>で作ったやつ。</p>
+<p>元々のコードはこんな感じ<br>RxJSのmarbleを使ってテストしてるのでちょっと論旨がズレそうな気もする…</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; deepStrictEqual &#125; <span class="keyword">from</span> <span class="string">"assert"</span>;</div><div class="line"><span class="keyword">import</span> &#123; TestScheduler &#125; <span class="keyword">from</span> <span class="string">"rxjs/testing/TestScheduler"</span>;</div><div class="line"><span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">"rxjs/Observable"</span>;</div><div class="line"><span class="keyword">import</span> <span class="string">"./"</span>;</div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  createTestScheduler,</div><div class="line">  TestSchedulers,</div><div class="line">  createColdObservable</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">"./test-helpers"</span>;</div><div class="line">  </div><div class="line">describe(<span class="string">"ofTypeObservable"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">let</span> action$: Observable&lt;<span class="built_in">any</span>&gt;;</div><div class="line">  <span class="keyword">let</span> testSchedulers: TestSchedulers;</div><div class="line">  <span class="keyword">let</span> testScheduler: TestScheduler;</div><div class="line">  <span class="keyword">let</span> cold: createColdObservable;</div><div class="line">  </div><div class="line">  beforeEach(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="comment">// createTestSchedulerの中でassertionをしている</span></div><div class="line">    testSchedulers = createTestScheduler();</div><div class="line">    testScheduler = testSchedulers.testScheduler;</div><div class="line">    cold = testSchedulers.cold;</div><div class="line">    action$ = cold(<span class="string">"abc"</span>, &#123;</div><div class="line">      a: &#123; <span class="keyword">type</span>: <span class="string">"foo"</span>, payload: <span class="string">"fooPayload"</span> &#125;,</div><div class="line">      b: &#123; <span class="keyword">type</span>: <span class="string">"bar"</span>, payload: <span class="string">"barPayload"</span> &#125;,</div><div class="line">      c: &#123; <span class="keyword">type</span>: <span class="string">"buzz"</span>, payload: <span class="string">"buzzPayload"</span> &#125;,</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">  </div><div class="line">  it(<span class="string">"should filtering specific type"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> expect$ = action$.ofType(<span class="string">"bar"</span>);</div><div class="line">    testScheduler.expectObservable(expect$).toBe(<span class="string">"-a"</span>, &#123; a: <span class="string">"barPayload"</span> &#125;);</div><div class="line">    testScheduler.flush();</div><div class="line">  &#125;);</div><div class="line">  </div><div class="line">  it(<span class="string">"can pick by own payload"</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    action$ = cold(<span class="string">"ab"</span>, &#123;</div><div class="line">      a: &#123; <span class="keyword">type</span>: <span class="string">"foo"</span>, payload: <span class="string">"fooPayload"</span> &#125;,</div><div class="line">      b: &#123; <span class="keyword">type</span>: <span class="string">"bar"</span>, customPayload: <span class="string">"barPayload"</span> &#125;,</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">const</span> expect$ = action$.ofType(<span class="string">"bar"</span>, <span class="function">(<span class="params">value: <span class="built_in">any</span></span>) =&gt;</span> value.customPayload);</div><div class="line">    testScheduler.expectObservable(expect$).toBe(<span class="string">"-a"</span>, &#123; a: <span class="string">"barPayload"</span> &#125;);</div><div class="line">    testScheduler.flush();</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>変更後はこんな感じ</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> test <span class="keyword">from</span> <span class="string">"tape"</span>;</div><div class="line"><span class="keyword">import</span> &#123; deepStrictEqual &#125; <span class="keyword">from</span> <span class="string">"assert"</span>;</div><div class="line"><span class="keyword">import</span> &#123; TestScheduler &#125; <span class="keyword">from</span> <span class="string">"rxjs/testing/TestScheduler"</span>;</div><div class="line"><span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">"rxjs/Observable"</span>;</div><div class="line">  </div><div class="line"><span class="keyword">import</span> <span class="string">"./"</span>;</div><div class="line"><span class="keyword">import</span> &#123; createTestScheduler, TestSchedulers, createColdObservable &#125; <span class="keyword">from</span> <span class="string">"./test-helpers"</span>;</div><div class="line">  </div><div class="line"><span class="keyword">const</span> setup = <span class="function">(<span class="params">assert: test.Test</span>) =&gt;</span> &#123;</div><div class="line">  <span class="comment">// createTestSchedulerの中でassertionをしているので、tapeの提供しているassertオブジェクトを渡してる</span></div><div class="line">  <span class="keyword">const</span> testSchedulers = createTestScheduler(assert);</div><div class="line">  <span class="keyword">const</span> testScheduler = testSchedulers.testScheduler;</div><div class="line">  <span class="keyword">const</span> cold = testSchedulers.cold;</div><div class="line">  <span class="keyword">const</span> action$ = cold(<span class="string">"abc"</span>, &#123;</div><div class="line">    a: &#123; <span class="keyword">type</span>: <span class="string">"foo"</span>, payload: <span class="string">"fooPayload"</span> &#125;,</div><div class="line">    b: &#123; <span class="keyword">type</span>: <span class="string">"bar"</span>, payload: <span class="string">"barPayload"</span> &#125;,</div><div class="line">    c: &#123; <span class="keyword">type</span>: <span class="string">"buzz"</span>, payload: <span class="string">"buzzPayload"</span> &#125;,</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    testSchedulers, testScheduler, cold, action$,</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">test(<span class="string">"should filtering specific type"</span>, <span class="function"><span class="params">assert</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> &#123;action$, testScheduler&#125; = setup(assert)</div><div class="line">  <span class="keyword">const</span> expect$ = action$.ofType(<span class="string">"bar"</span>);</div><div class="line">  testScheduler.expectObservable(expect$).toBe(<span class="string">"-a"</span>, &#123; a: <span class="string">"barPayload"</span> &#125;);</div><div class="line">  testScheduler.flush();</div><div class="line">  assert.end()</div><div class="line">&#125;)</div><div class="line">  </div><div class="line">test(<span class="string">"can pick by own payload"</span>, <span class="function"><span class="params">assert</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> &#123;cold, testScheduler&#125; = setup(assert)</div><div class="line">  <span class="keyword">const</span> action$ = cold(<span class="string">"ab"</span>, &#123;</div><div class="line">    a: &#123; <span class="keyword">type</span>: <span class="string">"foo"</span>, payload: <span class="string">"fooPayload"</span> &#125;,</div><div class="line">    b: &#123; <span class="keyword">type</span>: <span class="string">"bar"</span>, customPayload: <span class="string">"barPayload"</span> &#125;,</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">const</span> expect$ = action$.ofType(<span class="string">"bar"</span>, <span class="function">(<span class="params">value: <span class="built_in">any</span></span>) =&gt;</span> value.customPayload);</div><div class="line">  testScheduler.expectObservable(expect$).toBe(<span class="string">"-a"</span>, &#123; a: <span class="string">"barPayload"</span> &#125;);</div><div class="line">  testScheduler.flush();</div><div class="line">  assert.end()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>コード全体は<a href="https://github.com/kogai/of-type-operator" target="_blank" rel="external">ココ</a>にある</p>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=kogai-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00ESXY9MA&linkId=b69fd1b67eac33ba21c756c87b0e0380"></iframe>
+
+<p>たしかこの本で読んだんだったと思うけど、テストフレームワークの目的は入力に対して期待した出力が得られているか確認する単なる関数に過ぎない、みたいな話があって、自前のassertion関数を実装するように促されたりしていた。<br><code>tape</code>はそういう思想にわりと近い感じがしていて、登場人物がとても少なく且つグローバルな変数を使っていたりしないので、テストファイルの中で全てが完結しているのが良い感じだと思った。</p>
+<p>テストリポーターを任意のものにスイッチするのが</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(npm bin)/tape test.js | $(npm bin)/tape-custom-reporter</div></pre></td></tr></table></figure>
+<p>みたいにパイプで流せるのも良い。</p>
+<p>プロジェクト毎に色々変わったことをしようとするとまた話が変わってくるのかも知れないが、小さなライブラリのために使うのであれば、軽く導入できて良いように思った。<br>あとブラウザでテストを実行するのは試してみてないので、それは別途試してみたい。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;普段テストは、Node.jsのコードはmocha・ブラウザ向けのコードはkarma(jasmine)で書くことが多いんだけど、たまには別のライブラリも試してみたいな〜と思ってたところにこの記事を読んだ&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/j
+    
+    </summary>
+    
+    
+      <category term="TypeScript" scheme="https://kogai.github.io/tags/TypeScript/"/>
+    
+      <category term="JavaScript" scheme="https://kogai.github.io/tags/JavaScript/"/>
+    
+      <category term="mocha" scheme="https://kogai.github.io/tags/mocha/"/>
+    
+      <category term="tape" scheme="https://kogai.github.io/tags/tape/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Reactとredux-Observableでショッピングカートアプリを作ってみる話</title>
+    <link href="https://kogai.github.io/2016/11/30/sample-redux-observable/"/>
+    <id>https://kogai.github.io/2016/11/30/sample-redux-observable/</id>
+    <published>2016-11-30T14:16:37.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>これは<a href="http://qiita.com/advent-calendar/2016/react" target="_blank" rel="external">React Advent Calendar 2016</a>の第1日目の記事です。</p>
+<p>夏頃から<code>RxJS</code>で状態を管理して<code>React</code>で描画するようなアプリケーションを作っていました。<br><code>RxJS</code>に限らず、(F)RP系ライブラリの導入に際して、導入のメリットが分かりづらいという話があります。<br>難しい(そうに見える)新しいことを覚えてまで導入するほどのメリットがあるようには思えない、みたいな意見です。<br>特にライブラリのレポジトリに上がっているExampleアプリのような(例えばTODOアプリとか)ものだと、単に複雑性が増しているように見えるということもあります。</p>
+<p>これについて、<a href="https://www.manning.com/books/functional-reactive-programming" target="_blank" rel="external">Functional Reactive Programming</a>という本に、(F)RPは小さく単純なアプリケーションでサンプルを作ってもメリットが見えてこない、機能同士に複雑な依存関係があるような複雑なアプリケーションになって、はじめてその真価がわかってくる、というようなことが書いてありました。<br>(この本ではガソリン給油機アプリを想定して、ハイオク・レギュラーを給油しつつ、価格の最大値まで給油するみたいな仕組みを実装していました)</p>
+<p>この意見は、実際にアプリケーションを作った上での実感にも近いように思います。<br>そこでこの記事では<code>redux</code>のレポジトリにあるサンプルアプリケーションを元にちょっと複雑な仕様を足してみて、<code>RxJS</code>の導入メリットが分かりやすくなることを目指したいと思います。</p>
+<p>こんな手順で進めます。</p>
+<ol>
+<li><code>redux</code>のチュートリアルからサンプルアプリケーションを見繕ってコードと構造をザッと把握する</li>
+<li><code>1</code>で選んだサンプルアプリケーションの非同期処理部分を<code>RxJS</code>ベースの<code>redux</code>ミドルウェアである<a href="https://github.com/redux-observable/redux-observable" target="_blank" rel="external">redux-observable</a>で差し替える</li>
+<li>現実にあってもおかしくなさそうな仕様を足してみて、<code>RxJS</code>が複雑さを吸収できていそうか見てみる</li>
+</ol>
+<h2 id="reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る"><a href="#reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る" class="headerlink" title="reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る"></a>reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る</h2><p><a href="https://github.com/reactjs/redux/tree/master/examples" target="_blank" rel="external">reduxレポジトリのexamplesディレクトリ</a>にいくつかサンプルアプリケーションがあります。<br>この中で、非同期な通信の処理が入って現実のアプリケーションを想像しやすく、適度にシンプルな「ショッピングカート」アプリケーションを元にして進めてみたいと思います。</p>
+<p><a href="]https://github.com/kogai/sample-redux-observable/tree/redux-thunk">最初はこんな状態です</a><br><a href="アプリケーションの姿">https://www.evernote.com/l/AKiS90K33WFMOLWsEwDhEZSeLhagkl2xJkYB/image.png</a></p>
+<p>図のように、<code>Products</code>を在庫の許す限り<code>Cart</code>に投入できて、<code>Cart</code>の内容によって支払い総額が変わる、といったアプリケーションです。<br>非同期アクションを<code>redux-thunk</code>で<code>action creator</code>の中にdispatcherを流し込んで実現しているという、シンプルなアプリケーションとしてはわりとよくある感じの実装になっているようです。<br>※サーバ側の実装は煩雑さを避けるために、単なるjsonファイルとsetTimeoutで、非同期にレスポンスが返ってくることだけを表現しています。</p>
+<h2 id="サンプルアプリを、redux-observableで再実装してみる"><a href="#サンプルアプリを、redux-observableで再実装してみる" class="headerlink" title="サンプルアプリを、redux-observableで再実装してみる"></a>サンプルアプリを、redux-observableで再実装してみる</h2><p>では次に、このアプリケーションの<code>redux-thunk</code>を用いている部分を<code>redux-observable</code>に置き換えてみます。<br>まだこの時点では、<code>RxJS</code>を用いるメリットよりもデメリットの方が多いはずです。</p>
+<p><a href="https://github.com/kogai/sample-redux-observable/tree/redux-observable" target="_blank" rel="external">次はこういう状態にします</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// actions/index.js</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> types <span class="keyword">from</span> <span class="string">'../constants/ActionTypes'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> fetchAllProducts = <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.FETCH_PRODUCTS</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> receiveAllProducts = <span class="function"><span class="params">products</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.RECEIVE_PRODUCTS,</div><div class="line">  products</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> addToCart = <span class="function"><span class="params">productId</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.ADD_TO_CART_UNSAFE,</div><div class="line">  productId</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> receiveInCart = <span class="function"><span class="params">productId</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.ADD_TO_CART,</div><div class="line">  productId</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> checkout = <span class="function"><span class="params">products</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.CHECKOUT_REQUEST,</div><div class="line">  products,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> checkoutSuccess = <span class="function"><span class="params">cart</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.CHECKOUT_SUCCESS,</div><div class="line">  cart,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// epics/index.js</span></div><div class="line"><span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">"rxjs"</span>;</div><div class="line"><span class="keyword">import</span> shop <span class="keyword">from</span> <span class="string">'../api/shop'</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> types <span class="keyword">from</span> <span class="string">'../constants/ActionTypes'</span></div><div class="line"><span class="keyword">import</span> &#123;receiveAllProducts, receiveInCart, checkoutSuccess&#125; <span class="keyword">from</span> <span class="string">'../actions'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> allProductsEpic = <span class="function">(<span class="params">action$</span>) =&gt;</span> action$</div><div class="line">  .ofType(types.FETCH_PRODUCTS)</div><div class="line">  .mergeMap(<span class="function"><span class="params">_</span> =&gt;</span> Observable.bindCallback(shop.getProducts)())</div><div class="line">  .map(receiveAllProducts)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> addToCartEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> action$</div><div class="line">  .ofType(types.ADD_TO_CART_UNSAFE)</div><div class="line">  .map(<span class="function">(<span class="params">&#123;productId&#125;</span>) =&gt;</span> productId)</div><div class="line">  .filter(<span class="function"><span class="params">productId</span> =&gt;</span> store.getState().products.byId[productId].inventory &gt; <span class="number">0</span>)</div><div class="line">  .map(receiveInCart)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> checkoutEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> action$</div><div class="line">  .ofType(types.CHECKOUT_REQUEST)</div><div class="line">  .map(<span class="function">(<span class="params">&#123;products&#125;</span>) =&gt;</span> products)</div><div class="line">  .mergeMap(<span class="function"><span class="params">products</span> =&gt;</span> Observable.bindCallback(shop.buyProducts)(products))</div><div class="line">  .map(<span class="function"><span class="params">_</span> =&gt;</span> store.getState().cart)</div><div class="line">  .map(checkoutSuccess)</div></pre></td></tr></table></figure>
+<p>大きく変わっているのは、<code>redux-thunk</code>を用いて<code>action creator</code>の中で表現していた非同期処理を、<code>Epic</code>と呼ばれる別の構造の中で宣言することで、<code>action creator</code>が純粋で同期的な関数に戻っていることです。<br><code>Epic</code>とは<code>redux-observable</code>が提供する構造で、私は<code>redux</code>の世界に<code>RxJS</code>の<code>Observable</code>を組み込むためのもの、みたいに解釈しています。<br><code>redux-observable</code>のドキュメントには</p>
+<blockquote>
+<p>It is a function which takes a stream of actions and returns a stream of actions. Actions in, actions out.<br>You can think of it of having roughly this type signature:<br><code>function (action$: Observable&lt;Action&gt;, store: Store): Observable&lt;Action&gt;;</code></p>
+</blockquote>
+<p>とあります。<br><code>action</code>の<code>Observable</code>を受け取って、変性・フィルタリングなどを加えた<code>action</code>の<code>Observable</code>を返す関数である<code>Epic</code>を<code>Middleware</code>として<code>redux</code>の世界の中に組み込んでいる感じのようです。</p>
+<h2 id="仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る"><a href="#仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る" class="headerlink" title="仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る"></a>仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る</h2><p>さて、ここまでだとコードが減っているわけではないですし、あまりメリットが見えて来ないかも知れません。(<code>action</code>が純粋で同期的な関数からのみ生成されるようにはなりましたが。。。)<br>そこで(F)RP的なメリットが見えやすいように、機能同士に複雑な依存関係が必要になるような仕様を追加してみたいと思います。</p>
+<p>例えば今の仕様だと「カートの中身」は「商品のIDを投げる<code>action</code>」のみに依存しています。<br>これを別の<code>action</code>にも同時に依存しなければならないようにしてみたいと思います。</p>
+<p>こんな仕様です。</p>
+<ul>
+<li>3個の商品を購入すると支払い総額から1割値引きされる</li>
+<li>購入しようとしているユーザには通常会員・プレミアム会員の2種があり、属性によって割引率が変わる</li>
+<li>購入した商品の総額によって、割引率が増える</li>
+</ul>
+<p>こうなると、「カートの中身」とは「商品のIDを投げるAction」に加えて「ユーザの属性を投げる<code>action</code>」に依存したものになります。</p>
+<p>実際にコードに起こしたものはこういう感じです。<br><a href="https://github.com/kogai/sample-redux-observable/tree/redux-obsrvable-complicated" target="_blank" rel="external">少しだけ複雑なアプリケーション</a></p>
+<p>まず「カートの中身」を<code>Epic</code>にします。<br><code>cart reducer</code>に定義されていた「カートの中身とは、ADD_TO_CARTアクションで渡ってくる商品IDをとりまとめたもの」という定義を<code>Epic</code>として再定義する感じです。<br>ですので、<code>Epic</code>の中に定義された関数は、<code>reducers/index.js</code>に定義されていたユーティリティ関数を少し改修したものが多いです。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> cartEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> productId$ = Observable.merge(</div><div class="line">    action$.ofType(ADD_TO_CART).map(<span class="function">(<span class="params">&#123; productId &#125;</span>) =&gt;</span> productId),</div><div class="line">    action$.ofType(CHECKOUT_REQUEST).mapTo(<span class="literal">null</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">const</span> addedIds$ = productId$</div><div class="line">    .scan(<span class="function">(<span class="params">addedIds, id</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">if</span> (id === <span class="literal">null</span>) &#123;</div><div class="line">          <span class="keyword">return</span> []</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> addedIds.indexOf(id) !== <span class="number">-1</span> ? addedIds : [...addedIds, id]</div><div class="line">      &#125;, [])</div><div class="line"></div><div class="line">  <span class="keyword">const</span> quantityById$ = productId$</div><div class="line">    .scan(<span class="function">(<span class="params">quantityById, id</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (id === <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> &#123;&#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> &#123; ...quantityById, [id]: (quantityById[id] || <span class="number">0</span>) + <span class="number">1</span> &#125;</div><div class="line">    &#125;, &#123;&#125;)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> Observable</div><div class="line">    .combineLatest(addedIds$, quantityById$, (addedIds, quantityById) =&gt; (&#123;addedIds, quantityById&#125;))</div><div class="line">    .map(<span class="function">(<span class="params">&#123;addedIds, quantityById&#125;</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">const</span> &#123;byId&#125; = store.getState().products</div><div class="line"></div><div class="line">      <span class="keyword">const</span> total = addedIds</div><div class="line">          .reduce(<span class="function">(<span class="params">acc, id</span>) =&gt;</span> acc + byId[id].price * (quantityById[id] || <span class="number">0</span>), <span class="number">0</span>)</div><div class="line">          .toFixed(<span class="number">2</span>)</div><div class="line"></div><div class="line">      <span class="keyword">const</span> products = addedIds</div><div class="line">          .map(<span class="function"><span class="params">id</span> =&gt;</span> (&#123;</div><div class="line">            ...byId[id],</div><div class="line">            <span class="attr">quantity</span>: quantityById[id] || <span class="number">0</span>,</div><div class="line">          &#125;))</div><div class="line"></div><div class="line">      <span class="keyword">return</span> updateCart(&#123;</div><div class="line">        total,</div><div class="line">        products</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>次にアプリケーションにおける「ユーザー」を定義します。<br>まず既存の実装をベースに、偽のAPIレスポンス関数を用意します。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// こんなレスポンスを返すAPIを想定しています</div><div class="line">&#123;</div><div class="line">  "userType": 1, // 通常会員には0、プレミアム会員には1を返します</div><div class="line">  "amount": 499 // そのユーザーの、今までの購買額を返します</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> getUser = <span class="function"><span class="params">cb</span> =&gt;</span> setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> cb(_user), TIMEOUT)</div></pre></td></tr></table></figure>
+<p>更にユーザー情報を<code>Epic</code>として定義して、ユーザー情報の取得(必要なら更新も)をアプリケーションに組み込みます。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> userEpic = <span class="function"><span class="params">action$</span> =&gt;</span> action$</div><div class="line">  .ofType(ON_LOAD)</div><div class="line">  .mergeMap(<span class="function"><span class="params">_</span> =&gt;</span> Observable.bindCallback(getUser)())</div><div class="line">  .map(recieveUser)</div></pre></td></tr></table></figure>
+<p>最後に、割引率の算出ロジックを実装します。<br>まず<code>userEpic</code>がユーザー属性と購買総額に応じた割引率を取得できるように変更します。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> userEpic = <span class="function"><span class="params">action$</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> user$ = action$</div><div class="line">    .ofType(ON_LOAD)</div><div class="line">    .mergeMap(<span class="function"><span class="params">_</span> =&gt;</span> Observable.bindCallback(getUser)())</div><div class="line"></div><div class="line">  <span class="keyword">const</span> total$ = action$</div><div class="line">    .ofType(CHECKOUT_REQUEST)</div><div class="line">    .map(<span class="function">(<span class="params">&#123;total&#125;</span>) =&gt;</span> (&#123; <span class="attr">amount</span>: <span class="built_in">Number</span>(total) &#125;))</div><div class="line"></div><div class="line">  <span class="keyword">return</span> user$</div><div class="line">    .merge(total$)</div><div class="line">    .scan(<span class="function">(<span class="params">acc, next</span>) =&gt;</span> (&#123;</div><div class="line">      <span class="attr">amount</span>: acc.amount + next.amount,</div><div class="line">      <span class="attr">userType</span>: acc.userType,</div><div class="line">    &#125;))</div><div class="line">    .map(<span class="function"><span class="params">user</span> =&gt;</span> (&#123;</div><div class="line">      ...user,</div><div class="line">      <span class="comment">// プレミアムユーザー・支払い総額が1000ドルを超えるユーザーはそれぞれ割引率が追加される</span></div><div class="line">      discountRate: (user.userType === UserTypes.PREMIUM ? <span class="number">0.1</span> : <span class="number">0</span>) + (user.amount &gt; <span class="number">1000</span> ? <span class="number">0.1</span> : <span class="number">0</span>)</div><div class="line">    &#125;))</div><div class="line">    .map(recieveUser)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>次に<code>userEpic</code>が生成する「割引率」を「カートの中身」に混ぜ込みます。<br>これで最終的な割引率を加味した購入額をカートのチェックアウトの際に取得できるようになります。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> cartEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> &#123;</div><div class="line">  <span class="comment">// ...略</span></div><div class="line">  <span class="keyword">const</span> discountRate$ = action$.ofType(RECEIVE_USER).pluck(<span class="string">"discountRate"</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> Observable</div><div class="line">    .combineLatest(addedIds$, quantityById$, discountRate$, (addedIds, quantityById, userDiscountRate) =&gt; (&#123;addedIds, quantityById, userDiscountRate&#125;))</div><div class="line">    .map(<span class="function">(<span class="params">&#123;addedIds, quantityById, userDiscountRate&#125;</span>) =&gt;</span> &#123;</div><div class="line">      <span class="comment">// ...略</span></div><div class="line">      <span class="keyword">const</span> totalQuantity = addedIds.reduce(<span class="function">(<span class="params">acc, id</span>) =&gt;</span> acc + (quantityById[id] || <span class="number">0</span>), <span class="number">0</span>)</div><div class="line">      <span class="keyword">const</span> discountRate = (totalQuantity &gt;= <span class="number">3</span> ? <span class="number">0.3</span> : <span class="number">0</span>) + userDiscountRate</div><div class="line"></div><div class="line">      <span class="keyword">return</span> updateCart(&#123;</div><div class="line">        total,</div><div class="line">        products,</div><div class="line">        discountRate,</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>という感じで、難しい書き方をせずに「複数の<code>action</code>を起点に別の<code>action</code>を発行する」ような機能が実装できるのが、<code>redux-observable</code>と<code>RxJS</code>を<code>redux</code>の世界で用いるメリットということになるでしょうか。<br>ここでは触れられませんでしたが、<code>Epic</code>は<code>Observable</code>を受け取って<code>Observable</code>を返す関数に過ぎないので、<a href="http://blog.mmmcorp.co.jp/blog/2016/06/25/testing-rxjs-5/" target="_blank" rel="external">RxJSの提供するテスト手法</a>に乗っかって簡単にテストできるのもうれしいところです。</p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>以上、<code>redux-thunk</code>で非同期処理を取り扱っている<code>redux</code>の公式サンプルを<code>redux-observable</code>に置き換えて、少し仕様を複雑にするところまでを実装してみました。<br>何かの参考になればうれしいです。<br>明日の<a href="http://qiita.com/advent-calendar/2016/react" target="_blank" rel="external">React Advent Calendar 2016</a>もお楽しみに！(地図ライブラリの話めっちゃ気になります)</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://medium.com/@benlesh/redux-observable-ec0b00d2eb52" target="_blank" rel="external">RxJSのリードエンジニアによるredux-observableの紹介記事</a></li>
+<li><a href="https://redux-observable.js.org/" target="_blank" rel="external">redux-observableのドキュメント兼チュートリアル</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;これは&lt;a href=&quot;http://qiita.com/advent-calendar/2016/react&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;React Advent Calendar 2016&lt;/a&gt;の第1日目の記事です。&lt;/p&gt;
+&lt;p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Scalaに入門した</title>
+    <link href="https://kogai.github.io/2016/09/29/newbie-of-scala/"/>
+    <id>https://kogai.github.io/2016/09/29/newbie-of-scala/</id>
+    <published>2016-09-28T23:02:27.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近、サーバのコードを一から書いてみたいと思ってScalaに入門した。</p>
+<p>書いてみたいというか、Node.jsでならいくつか書いてみたことはあるんだけど、データストレージにMongoDBを使ってたりしてあんまり一般的な構成でない気がしていた。(PostgreSQL <em> Express </em> ReactSSRとか試したりはしてた)<br>一般的な構成というならRubyとかJavaをやっておけという話かも知れないが、静的型付けで関数型っぽく書ける言語で書きたいと思っていたので、Scalaを選んだ。<br>(Haskellで書ければ話が早いんだけどどうにも難しい…)</p>
+<p>1年くらい前にScalaの文法入門本を買っていて、Kindleの肥やしになっていたからというのや、『PHPからScalaに乗り換えたチャットワークさん、その後どうですか？』<a href="http://hrnabi.com/2016/08/19/11748/" target="_blank" rel="external">前編</a> / <a href="http://hrnabi.com/2016/08/22/11752/" target="_blank" rel="external">後編</a>でScalaの話がTLに上がってきたからというのもある。</p>
+<h3 id="入門の手順"><a href="#入門の手順" class="headerlink" title="入門の手順"></a>入門の手順</h3><p>ざっと入門した手順としては、</p>
+<h5 id="Guide-to-ScalaーScalaプログラミング入門"><a href="#Guide-to-ScalaーScalaプログラミング入門" class="headerlink" title="Guide to ScalaーScalaプログラミング入門 "></a><a href="http://amzn.to/2cCZ4Ri" target="_blank" rel="external">Guide to ScalaーScalaプログラミング入門 </a></h5><p>で大体の文法を把握して、</p>
+<h5 id="Guide-to-Play2-Scala"><a href="#Guide-to-Play2-Scala" class="headerlink" title="Guide to Play2 Scala "></a><a href="http://amzn.to/2daVtr4" target="_blank" rel="external">Guide to Play2 Scala </a></h5><p>でメジャー（っぽい）フレームワークの概要を把握しつつ、実際にWebアプリケーションを作ってみている。</p>
+<h5 id="Scala関数型デザイン-amp-プログラミング―Scalazコントリビューターによる関数型徹底ガイド"><a href="#Scala関数型デザイン-amp-プログラミング―Scalazコントリビューターによる関数型徹底ガイド" class="headerlink" title="Scala関数型デザイン&amp;プログラミング―Scalazコントリビューターによる関数型徹底ガイド"></a><a href="http://amzn.to/2daVyem" target="_blank" rel="external">Scala関数型デザイン&amp;プログラミング―Scalazコントリビューターによる関数型徹底ガイド</a></h5><p>も併せて読んでいるけど、これがとても良かった。<br><a href="http://amzn.to/2cCZ7g0" target="_blank" rel="external">すごいHaskellたのしく学ぼう！</a>で出てくるような概念を、練習問題付きでもう一度学習し直せる感じ。</p>
+<p>あと、コップ本こと<a href="http://amzn.to/2dfOeOU" target="_blank" rel="external">Scalaスケーラブルプログラミング第3版</a>が必読書として挙がっているのをよく見かけるので読みたいけど、電子版はPDFしか無いんですね…<br>KindleでPDF版読むのツラいので、epub/mobiで出して欲しい。</p>
+<h3 id="エディタ"><a href="#エディタ" class="headerlink" title="エディタ"></a>エディタ</h3><p>せっかくAltJavaに入門するので、ついでに本格的なIDEにも入門してみた。<br>あわよくばWebStorm(というかTypeScript)にも乗り換えられるかもと思って、IntelliJ IDEAを使っている。<br>無償版のコミュニティビルドでは、Playのテンプレートが解析対象外だったりして悲しかったが、今のところは有償版の無償期間内で機能を試している感じだ。</p>
+<p>使ってみると、さすがIDEといった使いやすさで、雰囲気で何となく生えているメソッドが分かったり、型推論の結果をホバー表示してくれたりというあたりが高速で、初心者に優しいなと思う。</p>
+<p>課金しても良い気はしているが、仕事で書いているTypeScriptの型推論が無い(というか、推論した結果を見る手段が弱い)のと、メソッド候補とかの推薦がScalaに較べるとだいぶ遅くて(ここらへんWebStormでも事情は同じだと思うんだけど)、VisualStudioCodeに軍配が上がっていると思っているので、自分を説得出来ないかも知れない。</p>
+<p>それでもAdobeのCCとかに較べると心理的な障壁は下がりそうではあるけど…</p>
+<h3 id="所感"><a href="#所感" class="headerlink" title="所感"></a>所感</h3><p>入門したばかりでまだ大したコードを書いていないけど、今のところここが嫌、みたいなところはない。<br>ただ、Haskellでもそうだったけど関数名に記号が許されているので、ちょっと混乱する時はある<br>(とは言え型定義にジャンプすれば事足りるし、混乱するのは初見の時だけだろうとも思っているけど)</p>
+<p>あと、Playフレームワークは旧バージョンのチュートリアルコンテンツにあたってしまうことが結構あって(前述の<a href="http://amzn.to/2daVtr4" target="_blank" rel="external">Guide to Play2 Scala </a>も結構前のバージョンの解説本らしい)、適宜変換していかないといけないところはあった。<br>まぁどのフレームワークでもその辺は同じか。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近、サーバのコードを一から書いてみたいと思ってScalaに入門した。&lt;/p&gt;
+&lt;p&gt;書いてみたいというか、Node.jsでならいくつか書いてみたことはあるんだけど、データストレージにMongoDBを使ってたりしてあんまり一般的な構成でない気がしていた。(PostgreSQ
+    
+    </summary>
+    
+    
+      <category term="server" scheme="https://kogai.github.io/tags/server/"/>
+    
+      <category term="Scala" scheme="https://kogai.github.io/tags/Scala/"/>
+    
+      <category term="Play" scheme="https://kogai.github.io/tags/Play/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RxJSのカスタムオペレータを作った</title>
+    <link href="https://kogai.github.io/2016/09/10/create-custom-operator/"/>
+    <id>https://kogai.github.io/2016/09/10/create-custom-operator/</id>
+    <published>2016-09-10T08:09:40.000Z</published>
+    <updated>2017-04-13T12:16:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近RxJSを使って状態の遷移を表現するような設計でアプリケーションを作っていた。</p>
+<p>ReduxをはじめとするFlux由来のライブラリをいくつか試してみたが、どうもreducerの役割をうまく扱いきれなかったり(凝集を疎にしてしまっているように思えてならなかったり…理解が浅いだけかも知れませんが)、非同期処理間に複数の依存関係が生じるような要件が提示されていたので(例えばある要素をクリックするとAPIリクエストが走り、そのレスポンスから別の要素のクリック・APIリクエストが可能になる、といった具合)、ReactiveProgramming的な考え方で作るのが最もフィットすると考えたからだ。</p>
+<p>最初は入力の起点毎にSubjectを作成して、各DOM要素にsubject.nextを紐付けるようなやり方をしていたのだが、ちょっと冗長というか無駄だと思う。<br>Reduxっぽく、単一のdispatcher関数に、ユーザの関心事の種類を表す情報(ActionType)を載せて分岐するようにした方が、スマートだろう。<br><a href="https://github.com/redux-observable/redux-observable" target="_blank" rel="external">redux-observable</a>なんかのソースコードを読んでいると<a href="https://github.com/redux-observable/redux-observable/blob/master/src/createEpicMiddleware.js#L17" target="_blank" rel="external">createEpicMiddleware</a>あたりでそういうアプローチを取っているように読み取った。</p>
+<p>※Twitterで教えて頂いたが、<a href="https://github.com/bouzuya/b-o-a" target="_blank" rel="external">boajs</a>も同様のアプローチを取っているそうで、<a href="https://github.com/bouzuya/boa-core/blob/master/src/run.ts#L7" target="_blank" rel="external">このあたり</a>のことかなと読み取った(間違っていたらすいません)</p>
+<p>で、このアプローチを取ると、共有しているsubject由来のストリームにフィルタをかけるような処理を頻繁に書くようになる。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> subject = <span class="keyword">new</span> Subject&lt;any&gt;();</div><div class="line"><span class="keyword">const</span> action$ = subject.asObservable();</div><div class="line">  </div><div class="line">action$ <span class="comment">// subject由来のストリーム</span></div><div class="line">  .filter(<span class="function"><span class="params">action</span> =&gt;</span> action.type === <span class="string">"SOME_ACTION_TYPE"</span>);</div></pre></td></tr></table></figure>
+<p>できればいわゆるアクションにはこういう型を期待して、</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">interface Action&lt;T&gt; &#123;</div><div class="line">  <span class="attr">type</span>: string;</div><div class="line">  payload?: T;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>こんな風にアクションのペイロードを引き出せるとうれしい</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">action$ <span class="comment">// subject由来のストリーム</span></div><div class="line">  .ofType(<span class="string">"SOME_ACTION_TYPE"</span>);</div><div class="line"><span class="comment">// =&gt; Observable&lt;Payload&gt;</span></div></pre></td></tr></table></figure>
+<p>RxJS(というかたぶんRx系ライブラリはみんなそうだろうが)には、ライブラリのユーザがオペレータを拡張できるようになっていて、<a href="https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md" target="_blank" rel="external">ガイドライン</a>も用意されている。</p>
+<p>いたずらにオペレータを増やすのはきな臭い予感しかしないが、ここぞという場面で使えばコードのリーダビリティと凝集度に大いに貢献してくれそうだ。<br><a href="https://www.manning.com/books/functional-reactive-programming" target="_blank" rel="external">Functional Reactive Programming</a>には、そもそもRP系ライブラリで提供されるオペレータは、10個のプリミティブなオペレータの組み合わせによる拡張に過ぎない、みたいな話もあった。</p>
+<p>さて、実はこのofTypeオペレータは<a href="https://github.com/redux-observable/redux-observable/blob/master/src/ActionsObservable.js" target="_blank" rel="external">redux-observableの内部</a>で実装されているものなのだった。<br>ただ、上述のようにことさらredux-observableを用いていないアプリケーションであっても、RxJSにFlux的なエッセンスを加えて構成する場合にとても有用なオペレータだ。<br>そこで、このオペレータに着想を得て(少しインターフェースを変えている)似たようなオペレータを作成・npmに公開した。</p>
+<p><a href="https://github.com/kogai/of-type-operator" target="_blank" rel="external">of-type-operator</a></p>
+<p><a href="https://github.com/kogai/of-type-operator/blob/master/dist/index.d.ts" target="_blank" rel="external">型定義</a>にあるように、</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;T&gt;(actionType: string, pickBy?: PickByFunction): Observable&lt;T&gt;</div></pre></td></tr></table></figure>
+<p>という感じだ。<br>redux-observableとは、複数のアクションタイプを受け取れない代わりに、project関数を受け取って、返す<code>Observable&lt;Result&gt;</code>を操作できるようにしている。<br>例えばこういう感じのアクションを定義している時もあるだろうという想定だ</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">interface Action &#123;</div><div class="line">  <span class="attr">type</span>: string;</div><div class="line">  userName: string;</div><div class="line">  userMail: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>作ってみてObservableへの理解は多少深まったような気がする。<br>特にオペレータの、Subscriberの子クラスをsubscribeのチェーンにつなげてliftする、みたいな基本的な構造を読むことになったのが良かった。</p>
+<p>ところで、RxJSのコードを眺めた後に『すごいHaskellたのしく学ぼう！』を再読してて、liftについて触れている箇所があることに気付いた時は興奮した。<br>関数の持ち上げ以外にも、Haskellに入門した時に触れた概念でRxへの理解がだいぶ進んだところがあるように思う。IOアクションとか。</p>
+<p>というわけで、よかったら使ってみてください。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近RxJSを使って状態の遷移を表現するような設計でアプリケーションを作っていた。&lt;/p&gt;
+&lt;p&gt;ReduxをはじめとするFlux由来のライブラリをいくつか試してみたが、どうもreducerの役割をうまく扱いきれなかったり(凝集を疎にしてしまっているように思えてならなかった
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="作ったもの" scheme="https://kogai.github.io/tags/%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%82%E3%81%AE/"/>
+    
+      <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
+    
+      <category term="typescript" scheme="https://kogai.github.io/tags/typescript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>テキストファイルの中身をクリップボードにコピーするGolang製CLIツールを作った</title>
+    <link href="https://kogai.github.io/2016/08/25/create-golip/"/>
+    <id>https://kogai.github.io/2016/08/25/create-golip/</id>
+    <published>2016-08-25T12:58:37.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>もう1年近く前の話だが、Golangでテキストファイルの中身をクリップボードにコピーするコマンドラインツールを作っていたのだった。</p>
+<p><a href="https://github.com/kogai/golip" target="_blank" rel="external">golip</a></p>
+<p>最終コミットが2015年末になっている。。。<br>作りっぱなしのまま放置していたけど、せっかく作ったことだし個人的には常用しているツールでもあるので制作物の記録として残しておく。</p>
+<h2 id="どんなツール？"><a href="#どんなツール？" class="headerlink" title="どんなツール？"></a>どんなツール？</h2><p>任意のマークダウンファイルをテンプレートとして保存しておき、コマンドラインからクリップボードにファイルの中身をコピーできるツール。<br>よく使う定型文なんかを保存しておいて、コマンド一発でペーストできる、みたいな使い方をする。</p>
+<p>例えば</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="section">## ベースとなるテンプレートファイル</span></div><div class="line"></div><div class="line">マークダウン形式で用意しておく</div></pre></td></tr></table></figure>
+<p>こんな感じで、マークダウン形式のファイルを用意しておき、</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">golip add [path/to/template-file.md]</div></pre></td></tr></table></figure>
+<p>用意したファイルへのパスを引数にして、コマンドを実行しておくと</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">golip copy template-file</div></pre></td></tr></table></figure>
+<p>こんなコマンドで、テンプレートファイルの中身が、クリップボードにコピーされる。<br>という、ごく簡単なツール。</p>
+<h2 id="なぜ作ったのか"><a href="#なぜ作ったのか" class="headerlink" title="なぜ作ったのか"></a>なぜ作ったのか</h2><p>仕事で、定型文のテンプレートををベースにPRやコードレビューを書くことになっているのだが、毎度雛形をコピー&amp;ペーストするのが面倒だったので。<br>制作当時、Githubのテンプレート機能(<code>.github/</code>以下に定型文のテンプレートを置いておくと、定型文の雛形として使えるやつ)は無かったので、自作してみた。</p>
+<p>機能としてはありふれているので、探せばこの辺の機能を満たして余りあるようなツールが見つかっただろうと思う。<br>もう一つの理由として、当時Golangに入門したばかりで、習熟のための小さなツールを作りたかったというのもあった。</p>
+<p>結果として、非常に小さな実装(150行くらい)ながらも、GolangでCLIを作る時の基礎を体得できたのでよかった。<br>冒頭でも少し触れたが、Githubにテンプレート機能ができた今でも常用している。<br>Githubのテンプレートはレポジトリ毎に共通だったり、特定のアクションに対して特定のテンプレートが必ず適用さたりと、若干使いでがよくないと感じてしまうシーンがあるので…<br>情が移っているだけという話でもあるが。</p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>実際に自分が使えるような、小さなツールを作ってみて言語の習熟度を上げるというのは、学習方法として結構良かったように思う。<br>小さくとも、定形の簡易アプリ(普段仕事で書いているフロントエンド界隈ではTODOアプリを作ってみるというのが定番になっている)を作るより、否応なく自分が認識していなかったその言語のイディオムに触れざるを得ないので、より実践的に習熟度を上げれるような気がする。<br>もっとも、適切なサイズのツールのアイディアがそういつも思いつくとは限らないが。。。</p>
+<p>よかったら使ってみて下さい。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;もう1年近く前の話だが、Golangでテキストファイルの中身をクリップボードにコピーするコマンドラインツールを作っていたのだった。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/kogai/golip&quot; target=&quot;_blank&quot; rel=&quot;ex
+    
+    </summary>
+    
+    
+      <category term="作ったもの" scheme="https://kogai.github.io/tags/%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%82%E3%81%AE/"/>
+    
+      <category term="golang" scheme="https://kogai.github.io/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TypeScript✕ReactJSで型安全なComponentを手に入れる</title>
+    <link href="https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/"/>
+    <id>https://kogai.github.io/2016/08/10/2016-08-10-type-safe-react-component-with-typescript/</id>
+    <published>2016-08-10T14:23:35.000Z</published>
+    <updated>2017-04-13T12:16:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="React-Proptypesに感じている不満"><a href="#React-Proptypesに感じている不満" class="headerlink" title="React.Proptypesに感じている不満"></a>React.Proptypesに感じている不満</h2><p>React組み込みのProptypesによる型検査は、実行時検証であり、アプリケーションを起動して、実際にコンポーネントを描画してみるまでエラーに気づけない。<br>また、React独自の機能であるので、他の下層DOMライブラリでも同様の型検査をできるわけではない。<br>さらに、Proptypesはコンポーネントに定義するので、型定義がViewに紐付いてしまう(ドメイン知識がViewに紐付いてしまう)<br>型定義の多くはドメイン知識に紐付いており、ViewではなくModel(State)レイヤーで定義したい。</p>
+<p>そこで本稿ではTypeScriptの静的解析の支援を受けて、型安全なコンポーネントを定義することでこの問題を解決する方法について説明したい。<br>※なお、ReactにはFacebook謹製のFlowTypeがあるが、あくまでアプリケーションの主体はModel層にあり、Model層はRxJSによるState川を作る設計にしたいという理由でTypeScriptを選択している</p>
+<h2 id="導入方法"><a href="#導入方法" class="headerlink" title="導入方法"></a>導入方法</h2><p>まず、TypeScriptとReactをインストールする。<br>※TypeScriptは2.x系のバージョンがベータ版としてリリースされているので、そちらを使うのであればtypingsは不要。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm i -S typescript react typings</div></pre></td></tr></table></figure>
+<p>次にReactの型定義ファイルを取得します</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(npm bin)/typings install -S react</div><div class="line"><span class="comment"># TypeScript@2の場合は npm install -D @types/react</span></div></pre></td></tr></table></figure>
+<p>これで準備は完了。</p>
+<h2 id="コンポーネントの定義"><a href="#コンポーネントの定義" class="headerlink" title="コンポーネントの定義"></a>コンポーネントの定義</h2><p>それでは実際にコンポーネントを定義する。<br>ReactにはReactComponentと、StatelessComponentという2種のコンポーネント型がある。</p>
+<p>ReactComponentは、一般的なReactのコンポーネントで、React.Componentを継承して定義するコンポーネント。<br>StatelessComponentは、関数として定義できるコンポーネントで、(当然だが)ライフサイクルメソッド、Stateを持たない。<br>Viewにロジックが入り込む余地をなくすことができるので、私は特に理由がない限りこちらのコンポーネントを使うようにしている。</p>
+<p>さて、ReactComponentとStatelessComponentのコンポーネント定義例を作成する前に、それぞれの型定義を確認したい。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">// ReactComponent</div><div class="line">class Component&lt;P, S&gt; implements ComponentLifecycle&lt;P, S&gt; &#123;</div><div class="line">  constructor(props?: P, context?: any);</div><div class="line">  setState(f: (prevState: S, props: P) =&gt; S, callback?: () =&gt; any): void;</div><div class="line">  setState(state: S, callback?: () =&gt; any): void;</div><div class="line">  forceUpdate(callBack?: () =&gt; any): void;</div><div class="line">  render(): ReactElement&lt;any&gt;;</div><div class="line">  </div><div class="line">  props: P &amp; &#123; children?: ReactNode &#125;;</div><div class="line">  state: S;</div><div class="line">  context: &#123;&#125;;</div><div class="line">  refs: &#123;</div><div class="line">    [key: string]: ReactInstance</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">// StatelessComponent</div><div class="line">interface StatelessComponent&lt;P&gt; &#123;</div><div class="line">  (props?: P, context?: any): ReactElement&lt;any&gt;;</div><div class="line">  propTypes?: ValidationMap&lt;P&gt;;</div><div class="line">  contextTypes?: ValidationMap&lt;any&gt;;</div><div class="line">  defaultProps?: P;</div><div class="line">  displayName?: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ReactComponentは<code>P</code>,<code>S</code>、StatelessComponentは<code>P</code>という型変数を受け取ることに注目したい。<br>これはPropsとStateを表す型変数で、それぞれコンポーネントのPropsとStateに受け取れる型を定義できる。<br>※余談だが、コンポーネント階層に暗黙に流れていくcontextというオブジェクトもあるが、こちらはany型になっている。</p>
+<p>つまり、PropTypesで実行時に検証していたPropsの型を、TypeScriptのジェネリクス機能によって、静的に解析・検証ができるというだ。<br>これによって、Model(Store)レイヤーで定義したインターフェースに変更があった場合でも、アプリケーションを実行することなく変更を検出・コンポーネントの定義を変更でき、非常に快適なコンポーネント作成を行うことができる。</p>
+<h2 id="作例"><a href="#作例" class="headerlink" title="作例"></a>作例</h2><p>では実際にコンポーネントの作例を書いてみたい。<br>例によってTodoアプリケーションを想定して、ごく簡単なTodoリストを描画したいとする。<br>(なお、JSX記法を用いて仮想DOMを定義しているので、拡張子を*.tsxとしている)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">import &#123; StatelessComponent, Component &#125; from "react";</div><div class="line">  </div><div class="line">// Propsの型を定義する</div><div class="line">interface ITodo &#123;</div><div class="line">  label: string;</div><div class="line">  isCompleted: boolean;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">interface ITodos &#123;</div><div class="line">  todos: ITodo[];</div><div class="line">&#125;</div><div class="line">  </div><div class="line">// StatelessComponentの型引数に上で定義した型を渡す</div><div class="line">const Todo: StatelessComponent&lt;ITodos&gt; = (&#123; label, isCompleted &#125;) =&gt; (</div><div class="line">  &lt;li className=&#123; isCompleted ? "Todo--is-complete" : "Todo" &#125;&gt;&#123; label &#125;&lt;/li&gt;</div><div class="line">);</div><div class="line">  </div><div class="line">const Todos: StatelessComponent&lt;ITodoProps&gt; = (&#123; todos &#125;) =&gt; (</div><div class="line">  &lt;ul&gt;</div><div class="line">    &#123;todos.map(todo =&gt; &lt;Todo &#123; ...todo &#125;/&gt;)&#125;</div><div class="line">  &lt;/ul&gt;</div><div class="line">);</div><div class="line">  </div><div class="line">// ReactComponentとして定義するなら...</div><div class="line">class Todo extends Component&lt;ITodos, void&gt; &#123;</div><div class="line">  render() &#123;</div><div class="line">    const &#123; label, isCompleted &#125; = this.props;</div><div class="line">    return &lt;li className=&#123; isCompleted ? "Todo--is-complete" : "Todo" &#125;&gt;&#123; label &#125;&lt;/li&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">class Todos extends Component&lt;ITodos, void&gt; &#123;</div><div class="line">  render() &#123;</div><div class="line">    const &#123; todos &#125; = this.props;</div><div class="line">    return (</div><div class="line">      &lt;ul&gt;</div><div class="line">        &#123;todos.map(todo =&gt; &lt;Todo &#123; ...todo &#125;/&gt;)&#125;</div><div class="line">      &lt;/ul&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>この作例では必要なかったが、React.Componentの第二型引数に渡した型で、this.stateの型も定義できる。<br>※個人的にはそもそもコンポーネント内部でStateを操作しないケースの方が多いと感じているが、アプリケーションのサイズに依存するだろう</p>
+<p>以上で型安全な子コンポーネントが作成できた。<br>これらのコンポーネントの親となるルートコンポーネントでルートStateを購読し、下層のコンポーネントに流してあげることで、アプリケーションのViewとしての定義が完成する。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">class</span> RootComponent <span class="keyword">extends</span> Component&lt;<span class="built_in">void</span>, ITodos&gt; &#123;</div><div class="line">  componentWillMount() &#123;</div><div class="line">    rootModel.subscribe(<span class="function"><span class="params">state</span> =&gt;</span> <span class="keyword">this</span>.setState(state));</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> &lt;Todos &#123; ...this.state &#125; /&gt;;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>以上、TypeScriptでReactコンポーネントを作成することで型安全なコンポーネントを定義する方法を紹介してみた。<br>参考になればうれしい。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;React-Proptypesに感じている不満&quot;&gt;&lt;a href=&quot;#React-Proptypesに感じている不満&quot; class=&quot;headerlink&quot; title=&quot;React.Proptypesに感じている不満&quot;&gt;&lt;/a&gt;React.Proptypesに感
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="typescript" scheme="https://kogai.github.io/tags/typescript/"/>
+    
+      <category term="reactjs" scheme="https://kogai.github.io/tags/reactjs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>object-assignの挙動について勘違いしていたこと</title>
+    <link href="https://kogai.github.io/2015/06/04/2015-06-04-behavior-of-object-assign/"/>
+    <id>https://kogai.github.io/2015/06/04/2015-06-04-behavior-of-object-assign/</id>
+    <published>2015-06-04T10:48:55.000Z</published>
+    <updated>2017-04-13T12:16:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>仕様をきちんと理解していれば自明のことですが、ハマりかけたのでメモしておきます。</p>
+<p>##この記事の概要<br>複数のオブジェクトを合成して新しいオブジェクトを返してくれる便利機能<code>Object.assign</code>。<br>現在は<code>harmony</code>オプション付きのNode.jsでも使えないので、<code>object-assign</code>などのモジュールを経由して使っていると思います。</p>
+<p>私が勘違いしていたのですが、これは</p>
+<blockquote>
+<p>引数として渡したオブジェクトを合成したオブジェクトを返す</p>
+</blockquote>
+<p>という機能ではなく、</p>
+<blockquote>
+<p>第二引数以降に渡したオブジェクトを、第一引数に渡したオブジェクトに合成して返す</p>
+</blockquote>
+<p>ものなのですね。</p>
+<p>MDNに記載されているリファレンスにも</p>
+<blockquote>
+<p>１つ以上のソースオブジェクトの保有する全ての列挙プロパティの値を、ターゲットのオブジェクトへコピーします。<br>戻り値はターゲットオブジェクトになります。</p>
+</blockquote>
+<p>と、明記されています。 <a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="external">Object.assign()</a></p>
+<p>コードで表すと<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">"use strict"</span>;</div><div class="line">  </div><div class="line"><span class="keyword">var</span> objectAssign = <span class="built_in">require</span>(<span class="string">'object-assign'</span>);</div><div class="line">  </div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">foo</span>: <span class="string">"bar"</span></div><div class="line">&#125;;</div><div class="line">  </div><div class="line"><span class="keyword">var</span> obj2 = &#123;</div><div class="line">  <span class="attr">baz</span>: <span class="string">"foobar"</span></div><div class="line">&#125;;</div><div class="line">  </div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; foo: 'bar' &#125;</span></div><div class="line"><span class="built_in">console</span>.log(obj2); <span class="comment">// &#123; baz: 'foobar' &#125;</span></div><div class="line">  </div><div class="line"><span class="keyword">var</span> obj3 = objectAssign(obj, obj2);</div><div class="line">  </div><div class="line"><span class="built_in">console</span>.log(obj3); <span class="comment">// &#123; foo: 'bar', baz: 'foobar' &#125;</span></div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; foo: 'bar', baz: 'foobar' &#125; objの中身も変わっている</span></div></pre></td></tr></table></figure></p>
+<p><code>obj3</code>に返されているのは<code>obj2</code>を合成した<code>obj</code>ですので、当然の挙動です。<br><code>obj</code>の中身を変更したくないのであれば、次のような書き方をする必要があります。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> target = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> obj4 = objectAssign(target, obj, obj2);</div><div class="line">  </div><div class="line"><span class="built_in">console</span>.log(obj4); <span class="comment">// &#123; foo: 'bar', baz: 'foobar' &#125;</span></div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; foo: 'bar' &#125; objの中身は変わっていない</span></div></pre></td></tr></table></figure>
+<p><code>React.js</code>で作っているサイトで、<code>Inline Styles</code>を導入してみて、初めてこの挙動を知った次第です。<br>きちんと仕様を理解するのが大事、というお話でした。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;仕様をきちんと理解していれば自明のことですが、ハマりかけたのでメモしておきます。&lt;/p&gt;
+&lt;p&gt;##この記事の概要&lt;br&gt;複数のオブジェクトを合成して新しいオブジェクトを返してくれる便利機能&lt;code&gt;Object.assign&lt;/code&gt;。&lt;br&gt;現在は&lt;code&gt;ha
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>なぜタスクランナーを使ったほうがいいのかをデザイナーに伝えるためにまとめた</title>
+    <link href="https://kogai.github.io/2015/05/13/2015-05-13-why-use-task-runner/"/>
+    <id>https://kogai.github.io/2015/05/13/2015-05-13-why-use-task-runner/</id>
+    <published>2015-05-13T10:54:03.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>近年のフロントエンド制作現場ではgrunt, gulp などのタスクランナーや、<br>browserify, webpackなどのビルドツールを使用するのが半ば常識となっています。<br>なぜこういったツールを使うのか、社内のデザイナーに伝えるためにまとめてみました。</p>
+<p>##タスクランナーとは?<br>現在要求されるレベルで成果物のクオリティを担保するためには、以下のような多岐にわたる処理が必要になります。</p>
+<p><em>必要になる処理の例</em></p>
+<ul>
+<li>テンプレートエンジンによるHTMLファイルの生成</li>
+<li>CSSプリプロセッサによるCSSの生成&amp;圧縮</li>
+<li>CSSスプライトの作成</li>
+<li>JavaScriptファイルの依存関係解決&amp;圧縮</li>
+<li>Alt-JSファイルの変換</li>
+<li>各種画像の最適化</li>
+<li>他多数…</li>
+</ul>
+<p>これら全てを手作業で行うのは、非現実的な選択肢と言えます。<br>そこで、こういったタスクを全て自動化するためのツールが<code>grunt</code>/<code>gulp</code>に代表される、タスクランナーと呼ばれるツールです。</p>
+<p>###ビルドツール<br>極々小規模なプロジェクト(数十行で完結する程度のもの)を除いて、<code>browserify</code>, <code>webpack</code>などのビルドツールを用いて<br><code>JavaScript</code>ファイルを生成する事が、スタンダードになってきています。</p>
+<p>これには以下のような理由があります。</p>
+<ul>
+<li><code>CoffeeScript</code>や<code>TypeScript</code>など、<code>AltJS</code>の普及によって、実行用の<code>JavaScript</code>ファイルへの変換が必要になった</li>
+<li>既存の<code>JavaScript</code>にはモジュール機構が存在しないため、全ての関数がグローバルになってしまう問題があった(※2015年夏頃より勧告されるES6では<code>import</code>文によるモジュール機構が実装される)</li>
+<li>モジュール機構が存在しないため、サードパーティ製ライブラリに対する依存状態が管理できず、運用が進むにつれてライブラリの要・不要が判別できなくなることが多かった</li>
+<li>モジュール機構が存在しないため、手作業によるライブラリの読み込みの設定を余儀なくされた。そのため読み込み順によっては動作しないコードが出てくる問題があった</li>
+</ul>
+<p>こういった問題を解決するために、<code>browserify</code>, <code>webpack</code>に代表される、ビルドツールが用いられるようになりました。<br>ビルドツールによるビルド処理も、タスクランナーを用いて行われます。</p>
+<p>##導入<br><code>grunt</code>, <code>gulp</code>は共に、<code>node.js</code>というサーバーサイド<code>JavaScript</code>実行環境(PCで直接<code>JavaScript</code>を実行出来るようになるソフトウェア、と考えれば大体正しいです)を用いて実装されています。<br><code>grunt</code>, <code>gulp</code>のどちらも、使い方や導入方法、出来ることに大きな差はありません。<br>各タスクの処理の仕方の差で、<code>gulp</code>の方が動作が速いので、新規のプロジェクトであれば<code>gulp</code>を使うのをお勧めします。</p>
+<p>詳しい導入方法を説明した記事は無数にあるので、<code>grunt 導入</code>とか<code>grunt how to use</code>などでググって下さい。</p>
+<p>以下なんかはわりと詳しく載っていてお勧めです。<br><a href="http://hyper-text.org/archives/2014/01/grunt_quick_start_for_web_designer.shtml" target="_blank" rel="external">Web デザイナーさん向け Grunt を使った コーディング作業の効率化、はじめの一歩</a></p>
+<p>###大体の手順</p>
+<ol>
+<li><code>node.js</code>をインストール  </li>
+<li><code>grunt-cli</code>(Gruntコマンドラインクライアント)をインストール</li>
+<li>各プロジェクトでGruntタスクを実行可能に</li>
+</ol>
+<p>一応これで伝わるかな。。。<br>ついでに普段使ってる<code>gulpfile.js</code>の雛形も置いておきます</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div></pre></td><td class="code"><pre><div class="line">gulp = <span class="built_in">require</span> <span class="string">'gulp'</span></div><div class="line">browserSync = <span class="built_in">require</span> <span class="string">'browser-sync'</span></div><div class="line">reload = browserSync.reload</div><div class="line">data = <span class="built_in">require</span> <span class="string">'gulp-data'</span></div><div class="line">util = <span class="built_in">require</span>(<span class="string">'gulp-util'</span>)</div><div class="line">debug = <span class="built_in">require</span> <span class="string">'gulp-debug'</span></div><div class="line">newer = <span class="built_in">require</span> <span class="string">'gulp-newer'</span></div><div class="line">compass = <span class="built_in">require</span> <span class="string">'gulp-compass'</span></div><div class="line">sourcemaps = <span class="built_in">require</span> <span class="string">'gulp-sourcemaps'</span></div><div class="line">minify = <span class="built_in">require</span> <span class="string">'gulp-minify-css'</span></div><div class="line">del = <span class="built_in">require</span>(<span class="string">'del'</span>)</div><div class="line"></div><div class="line"><span class="comment"># browserify</span></div><div class="line">browserify = <span class="built_in">require</span> <span class="string">'browserify'</span></div><div class="line">debowerify = <span class="built_in">require</span> <span class="string">'debowerify'</span></div><div class="line">licensify = <span class="built_in">require</span> <span class="string">'licensify'</span></div><div class="line">source = <span class="built_in">require</span> <span class="string">'vinyl-source-stream'</span></div><div class="line">streamify = <span class="built_in">require</span> <span class="string">'gulp-streamify'</span></div><div class="line">uglify = <span class="built_in">require</span> <span class="string">'gulp-uglify'</span></div><div class="line">buffer = <span class="built_in">require</span> <span class="string">'vinyl-buffer'</span></div><div class="line"></div><div class="line"><span class="comment"># jade</span></div><div class="line">jade = <span class="built_in">require</span> <span class="string">'gulp-jade'</span></div><div class="line"></div><div class="line"><span class="comment"># images</span></div><div class="line">pngmin = <span class="built_in">require</span> <span class="string">'gulp-pngmin'</span></div><div class="line">imagemin = <span class="built_in">require</span> <span class="string">'gulp-imagemin'</span></div><div class="line">jpegtran = <span class="built_in">require</span> <span class="string">'imagemin-jpegtran'</span></div><div class="line"></div><div class="line"><span class="comment"># watch</span></div><div class="line">watch = <span class="built_in">require</span> <span class="string">'gulp-watch'</span></div><div class="line"></div><div class="line"><span class="comment"># deploy</span></div><div class="line">scp = <span class="built_in">require</span> <span class="string">'scp'</span></div><div class="line"></div><div class="line">src =</div><div class="line">	js : <span class="string">'./src/javascript'</span></div><div class="line">	css : <span class="string">'./src/sass'</span></div><div class="line">	html : <span class="string">'./src/jade'</span></div><div class="line">	image : <span class="string">'./src/image'</span></div><div class="line">	copy : <span class="string">'./src/copy'</span></div><div class="line"></div><div class="line">build =</div><div class="line">	js : <span class="string">'./build/public'</span></div><div class="line">	css : <span class="string">'./build/public'</span></div><div class="line">	html : <span class="string">'./build'</span></div><div class="line">	image : <span class="string">'./build/public/image'</span></div><div class="line"></div><div class="line">env =</div><div class="line">	isProduct : <span class="literal">false</span></div><div class="line">	deployToProduct : <span class="literal">false</span></div><div class="line">	rootDev: <span class="string">'/path/to/staging'</span></div><div class="line">	rootPro: <span class="string">'/path/to/production'</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'deploy'</span>, <span class="function">-&gt;</span></div><div class="line">	dest = env.rootDev</div><div class="line"></div><div class="line">	<span class="keyword">if</span> env.deployToProduct</div><div class="line">		dest = env.rootPro</div><div class="line">	<span class="keyword">else</span></div><div class="line">		dest = env.rootDev</div><div class="line"></div><div class="line">	scp.send(</div><div class="line">		file : <span class="string">'./deploy/*'</span></div><div class="line">		host : <span class="string">'hostname'</span></div><div class="line">		user : <span class="string">'username'</span></div><div class="line">		path : dest</div><div class="line">	, <span class="function"><span class="params">(e)</span> -&gt;</span></div><div class="line">		util.beep()</div><div class="line">		<span class="built_in">console</span>.log e</div><div class="line">	)</div><div class="line"></div><div class="line">gulp.task <span class="string">'changeEnv'</span>, <span class="function">-&gt;</span></div><div class="line">	env.isProduct = <span class="literal">true</span></div><div class="line">	build =</div><div class="line">		js : <span class="string">'./deploy/public'</span></div><div class="line">		css : <span class="string">'./deploy/public'</span></div><div class="line">		html : <span class="string">'./deploy'</span></div><div class="line">		image : <span class="string">'./deploy/public/image'</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'changeDeployEnv'</span>, <span class="function">-&gt;</span></div><div class="line">	env.deployToProduct = <span class="literal">true</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'css'</span>, <span class="function">-&gt;</span></div><div class="line">	<span class="keyword">if</span> env.isProduct</div><div class="line">		gulp.src(src.css + <span class="string">'/*.sass'</span>)</div><div class="line">		.pipe compass(</div><div class="line">			css : build.css</div><div class="line">			sass : src.css</div><div class="line">		)</div><div class="line">		.pipe minify()</div><div class="line">		.pipe gulp.dest(build.css)</div><div class="line">	<span class="keyword">else</span></div><div class="line">		gulp.src(src.css + <span class="string">'/*.sass'</span>)</div><div class="line">		.pipe sourcemaps.init()</div><div class="line">		.pipe compass(</div><div class="line">			css : build.css</div><div class="line">			sass : src.css</div><div class="line">		)</div><div class="line">		.pipe sourcemaps.write(<span class="string">'./'</span>)</div><div class="line">		.pipe gulp.dest(build.css)</div><div class="line"></div><div class="line">gulp.task <span class="string">'html'</span>, <span class="function">-&gt;</span></div><div class="line">	<span class="keyword">if</span> env.isProduct</div><div class="line">		opt = pretty : <span class="literal">false</span></div><div class="line">	<span class="keyword">else</span></div><div class="line">		opt = pretty : <span class="literal">true</span></div><div class="line"></div><div class="line">	gulp.src(src.html + <span class="string">'/*.jade'</span>)</div><div class="line">	.pipe data (file) -&gt;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">require</span> src.html + <span class="string">'/index.json'</span></div><div class="line">	.pipe(jade(opt))</div><div class="line">	.pipe gulp.dest(build.html)</div><div class="line">	.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">(e)</span> -&gt;</span></div><div class="line">		util.beep();</div><div class="line">		<span class="built_in">console</span>.log e</div><div class="line">	<span class="keyword">return</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'js'</span>, <span class="function">-&gt;</span></div><div class="line">	<span class="keyword">if</span> env.isProduct</div><div class="line">		browserify</div><div class="line">			entries : [src.js + <span class="string">'/index.coffee'</span>]</div><div class="line">			extensions : [<span class="string">'.coffee'</span>, <span class="string">'.js'</span>]</div><div class="line">		.plugin licensify</div><div class="line">		.transform <span class="string">'coffeeify'</span></div><div class="line">		.transform <span class="string">'debowerify'</span></div><div class="line">		.bundle()</div><div class="line">		.pipe source(<span class="string">'bundle.min.js'</span>)</div><div class="line">		.pipe buffer()</div><div class="line">		.pipe streamify uglify()</div><div class="line">		.pipe gulp.dest(build.js)</div><div class="line">	<span class="keyword">else</span></div><div class="line">		browserify</div><div class="line">			entries : [src.js + <span class="string">'/index.coffee'</span>]</div><div class="line">			extensions : [<span class="string">'.coffee'</span>, <span class="string">'.js'</span>]</div><div class="line">		.plugin licensify</div><div class="line">		.transform <span class="string">'coffeeify'</span></div><div class="line">		.transform <span class="string">'debowerify'</span></div><div class="line">		.bundle()</div><div class="line">		.pipe source(<span class="string">'bundle.min.js'</span>)</div><div class="line">		.pipe buffer()</div><div class="line">		.pipe sourcemaps.init</div><div class="line">			loadMaps : <span class="literal">true</span></div><div class="line">		.pipe streamify uglify()</div><div class="line">		.pipe sourcemaps.write(<span class="string">'./'</span>)</div><div class="line">		.pipe gulp.dest(build.js)</div><div class="line"></div><div class="line">gulp.task <span class="string">'pngmin'</span>, <span class="function">-&gt;</span></div><div class="line">	gulp.src([</div><div class="line">		src.image + <span class="string">'/*.png'</span></div><div class="line">		src.image + <span class="string">'/**/*.png'</span></div><div class="line">	])</div><div class="line">	.pipe newer build.image</div><div class="line">	.pipe pngmin()</div><div class="line">	.pipe gulp.dest build.image</div><div class="line"></div><div class="line">gulp.task <span class="string">'jpgmin'</span>, <span class="function">-&gt;</span></div><div class="line">	gulp.src([</div><div class="line">		src.image + <span class="string">'/*.jpg'</span></div><div class="line">		src.image + <span class="string">'/**/*.jpg'</span></div><div class="line">	])</div><div class="line">	.pipe imagemin(</div><div class="line">		prpgressive : <span class="literal">true</span></div><div class="line">		svgoPlugins : [&#123;removeViewBox : <span class="literal">false</span>&#125;]</div><div class="line">		use : [jpegtran()]</div><div class="line">	)</div><div class="line">	.pipe gulp.dest build.image</div><div class="line"></div><div class="line">gulp.task <span class="string">'copy-dir'</span>, <span class="function">-&gt;</span></div><div class="line">	gulp.src([</div><div class="line">		src.copy + <span class="string">"/*"</span></div><div class="line">		src.copy + <span class="string">"/**/*"</span></div><div class="line">		src.copy + <span class="string">"/**/**/*"</span></div><div class="line">	])</div><div class="line">	.pipe(gulp.dest(build.html))</div><div class="line"></div><div class="line">gulp.task <span class="string">'copy-img'</span>, <span class="function">-&gt;</span></div><div class="line">	gulp.src([</div><div class="line">		src.image + <span class="string">'/*.gif'</span></div><div class="line">		src.image + <span class="string">'/**/*.gif'</span></div><div class="line">		src.image + <span class="string">'/**/**/*.gif'</span></div><div class="line">	])</div><div class="line">	.pipe(gulp.dest(build.image))</div><div class="line"></div><div class="line">gulp.task <span class="string">'img'</span>, [</div><div class="line">	<span class="string">'pngmin'</span></div><div class="line">	<span class="string">'jpgmin'</span></div><div class="line">	<span class="string">'copy-img'</span></div><div class="line">]</div><div class="line"></div><div class="line">gulp.task <span class="string">'browser'</span>, <span class="function">-&gt;</span></div><div class="line">	browserSync server :</div><div class="line">		baseDir : <span class="string">'build'</span></div><div class="line">		directory : <span class="literal">true</span></div><div class="line">	<span class="keyword">return</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'clean'</span>, <span class="function"><span class="params">(cb)</span> -&gt;</span></div><div class="line">	del([</div><div class="line">		<span class="string">'deploy/'</span></div><div class="line">	], cb)</div><div class="line"></div><div class="line">gulp.task <span class="string">'watch'</span>, <span class="function">-&gt;</span></div><div class="line">	gulp.watch([</div><div class="line">			src.js + <span class="string">'/*.coffee'</span></div><div class="line">			src.js + <span class="string">'/**/*.coffee'</span></div><div class="line">		], [</div><div class="line">			<span class="string">'js'</span></div><div class="line">			reload</div><div class="line">	])</div><div class="line">	gulp.watch([</div><div class="line">			src.html + <span class="string">'/*.jade'</span></div><div class="line">			src.html + <span class="string">'/**/*.jade'</span></div><div class="line">		], [</div><div class="line">			<span class="string">'html'</span></div><div class="line">			reload</div><div class="line">	])</div><div class="line">	gulp.watch([</div><div class="line">			src.css + <span class="string">'/*.sass'</span></div><div class="line">			src.css + <span class="string">'/**/*.sass'</span></div><div class="line">		], [</div><div class="line">			<span class="string">'css'</span></div><div class="line">			reload</div><div class="line">	])</div><div class="line">	gulp.watch([</div><div class="line">			src.image + <span class="string">'/*'</span></div><div class="line">			src.image + <span class="string">'/**/*'</span></div><div class="line">		], [</div><div class="line">			<span class="string">'img'</span></div><div class="line">			reload</div><div class="line">	])</div><div class="line">	<span class="keyword">return</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'default'</span>, [</div><div class="line">	<span class="string">'css'</span></div><div class="line">	<span class="string">'js'</span></div><div class="line">	<span class="string">'html'</span></div><div class="line">	<span class="string">'img'</span></div><div class="line">	<span class="string">'copy-dir'</span></div><div class="line">]</div><div class="line"></div><div class="line">gulp.task <span class="string">'server'</span>, [</div><div class="line">	<span class="string">'default'</span></div><div class="line">	<span class="string">'browser'</span></div><div class="line">	<span class="string">'watch'</span></div><div class="line">]</div><div class="line"></div><div class="line">gulp.task <span class="string">'build'</span>, [</div><div class="line">	<span class="string">'clean'</span></div><div class="line">	<span class="string">'changeEnv'</span></div><div class="line">], <span class="function">-&gt;</span></div><div class="line">	gulp.run <span class="string">'default'</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'staging'</span>, [</div><div class="line">	<span class="string">'deploy'</span></div><div class="line">]</div><div class="line"></div><div class="line">gulp.task <span class="string">'production'</span>, [</div><div class="line">	<span class="string">'changeDeployEnv'</span></div><div class="line">	<span class="string">'deploy'</span></div><div class="line">]</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近年のフロントエンド制作現場ではgrunt, gulp などのタスクランナーや、&lt;br&gt;browserify, webpackなどのビルドツールを使用するのが半ば常識となっています。&lt;br&gt;なぜこういったツールを使うのか、社内のデザイナーに伝えるためにまとめてみました。&lt;/
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="gulp.js" scheme="https://kogai.github.io/tags/gulp-js/"/>
+    
+      <category term="grunt.js" scheme="https://kogai.github.io/tags/grunt-js/"/>
+    
+      <category term="sass" scheme="https://kogai.github.io/tags/sass/"/>
+    
+      <category term="jade" scheme="https://kogai.github.io/tags/jade/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>private npmを試してみた</title>
+    <link href="https://kogai.github.io/2015/04/15/2015-04-15-private-npm/"/>
+    <id>https://kogai.github.io/2015/04/15/2015-04-15-private-npm/</id>
+    <published>2015-04-15T08:03:25.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>以前より話が出ていた、npmのプライベートモジュールが公開されていました。<br><a href="https://www.npmjs.com/private-modules" target="_blank" rel="external">private-modules</a><br><img src="https://www.evernote.com/shard/s168/sh/241a329b-f2a3-4a33-ad08-4b7fc59d573c/6ec829c5154bd20530db0c9b20b7fffc/deep/0/npm.png" alt=""></p>
+<p>##機能</p>
+<blockquote>
+<ul>
+<li>create and share unlimited private modules for $7/month</li>
+<li>Host as many private packages as you want</li>
+<li>Give read access or read-write access for those packages to any other paid user</li>
+<li>Install and use any packages that other paid users have given you read access to</li>
+<li>Collaborate on any packages that other paid users have given you write access to</li>
+</ul>
+</blockquote>
+<p>要旨としては</p>
+<ul>
+<li>月額7ドルでモジュールをプライベート公開に出来る</li>
+<li>任意の課金済みユーザーに読み書き権限の発行ができる</li>
+</ul>
+<p>ということのようです。</p>
+<blockquote>
+<p>Currently, private packages are only available for individual users, but support for organization accounts is coming soon. Feel free to create a user for your organization in the meantime, and we can upgrade it to an organization when support is here.</p>
+</blockquote>
+<p>企業(組織)アカウント向けの対応はこれからのようです。</p>
+<p>##導入の仕方</p>
+<ol>
+<li><p><a href="https://www.npmjs.com" target="_blank" rel="external">npmjs</a>にサインアップして課金しておきます。<br>※クレジットカード払いのみのようです。</p>
+</li>
+<li><p>任意のnpmの<code>package.json</code>の<code>name</code>プロパティに自分のユーザーアカウント名を入れます</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public</div><div class="line">"name": "modulename"</div><div class="line"></div><div class="line">private</div><div class="line">"name": "@username/modulename"</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>npm publish</code>で公開します。</p>
+</li>
+</ol>
+<p>説明が必要なほどの手順はないですね。。。<br>既にnpmを公開したことがある人なら、ほぼやることはありません。<br>課金して、モジュールの名前にユーザー名を入れるだけ。</p>
+<p>ロードマップにあるという、企業アカウント向けの対応が始まったらnpmの使い方が変わってくるかも知れません。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;以前より話が出ていた、npmのプライベートモジュールが公開されていました。&lt;br&gt;&lt;a href=&quot;https://www.npmjs.com/private-modules&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;private-modules&lt;/
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Promiseで非同期処理をするメモ</title>
+    <link href="https://kogai.github.io/2015/04/13/2015-04-13-promise-or-defferd/"/>
+    <id>https://kogai.github.io/2015/04/13/2015-04-13-promise-or-defferd/</id>
+    <published>2015-04-13T10:20:20.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>非同期処理の書き方色々</p>
+<p>myAsync.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"></div><div class="line"><span class="comment">// Promiseオブジェクトをそのまま返す</span></div><div class="line"><span class="keyword">let</span> readAsync = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">    fs.readFile(<span class="string">'./README.md'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line">      resolve(data);</div><div class="line">    &#125;)</div><div class="line">  &#125;);</div><div class="line"></div><div class="line"><span class="comment">// Promiseオブジェクトを返す関数</span></div><div class="line"><span class="keyword">let</span> writeAsync = <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">    fs.writeFile(<span class="string">'./README-copy.md'</span>, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">      resolve();</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Defferedオブジェクトのpromiseを返す</span></div><div class="line"><span class="keyword">let</span> renameAsync = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> d = <span class="built_in">Promise</span>.defer();</div><div class="line">  fs.rename(<span class="string">'./README-copy.md'</span>, <span class="string">'./README-copy-modified.md'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">    d.resolve();</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> d.promise;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// Generator</span></div><div class="line"><span class="keyword">let</span> AppendAsync = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  fs.appendFile(<span class="string">'./README-copy-modified.md'</span>, <span class="string">'this string is appended.'</span>);</div><div class="line">  <span class="keyword">yield</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">readAsync</div><div class="line">.then(writeAsync)</div><div class="line">.then(renameAsync)</div><div class="line">.then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  AppendAsync().next();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>実行してみる<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">babel-node myAsync.js</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;非同期処理の書き方色々&lt;/p&gt;
+&lt;p&gt;myAsync.js&lt;br&gt;&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div cl
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="promise" scheme="https://kogai.github.io/tags/promise/"/>
+    
+      <category term="es6" scheme="https://kogai.github.io/tags/es6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>gulp:開発/本番環境でタスクの内容を調整して幸せになる</title>
+    <link href="https://kogai.github.io/2015/04/12/2015-04-07-gulp-newer/"/>
+    <id>https://kogai.github.io/2015/04/12/2015-04-07-gulp-newer/</id>
+    <published>2015-04-12T11:00:00.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>###更新したファイルだけをタスクの対象に</p>
+<p>gulpでファイルの自動生成をする時、対象ファイルの数が増えてくると生成に時間がかかってツラい感じになってきます。<br><code>gulp-newer</code>を使えば更新した差分ファイルのみをタスクの対象にしてくれるので幸せな感じになれます。</p>
+<figure class="highlight coffee"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">gulp = <span class="built_in">require</span> <span class="string">'gulp'</span></div><div class="line">newer = <span class="built_in">require</span> <span class="string">'gulp-newer'</span></div><div class="line">jade = <span class="built_in">require</span> <span class="string">'gulp-jade'</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'sampleTask'</span>, <span class="function">-&gt;</span></div><div class="line">  <span class="comment"># 更新差分の基準になるファイル</span></div><div class="line">  criterionFiles = <span class="string">'./dest/html'</span></div><div class="line"></div><div class="line">	gulp.src([</div><div class="line">		<span class="string">'./src/jade/!(_)*.jade'</span></div><div class="line">	])</div><div class="line">	.pipe(newer(criterionFiles))</div><div class="line">	.pipe(jade())</div><div class="line">	.pipe(gulp.dest(dest))</div><div class="line"></div><div class="line">gulp.task <span class="string">'default'</span>, [</div><div class="line">  <span class="string">'sampleTask'</span></div><div class="line">]</div></pre></td></tr></table></figure>
+<p>###本番環境用ファイルを生成する時<br>本番環境用のファイルを作る時は、生成漏れがあったら困るので更新差分にはしたくありません。<br>そこで<code>production</code>環境の変数を作ってあげて、更新差分の基準ファイルを振り分けするようにしました。</p>
+<figure class="highlight coffee"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">config =</div><div class="line">	production: <span class="literal">false</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'setProduction'</span>, <span class="function">-&gt;</span></div><div class="line">  config.production = <span class="literal">true</span></div><div class="line"></div><div class="line">gulp.task <span class="string">'sampleTask'</span>, <span class="function">-&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">if</span>( config.production )</div><div class="line">	   criterionFiles = <span class="string">''</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">	   criterionFiles = <span class="string">'./dest/html'</span></div><div class="line"></div><div class="line">	gulp.src([</div><div class="line">		<span class="string">'./src/jade/!(_)*.jade'</span></div><div class="line">	])</div><div class="line">	.pipe(newer(criterionFiles))</div><div class="line">	.pipe(jade())</div><div class="line">	.pipe(gulp.dest(dest))</div><div class="line"></div><div class="line">gulp.task <span class="string">'default'</span>, [</div><div class="line">	<span class="string">'sampleTask'</span></div><div class="line">]</div><div class="line"></div><div class="line">gulp.task <span class="string">'build'</span>, [</div><div class="line">	<span class="string">'setProduction'</span></div><div class="line">	<span class="string">'default'</span></div><div class="line">]</div></pre></td></tr></table></figure>
+<p>###まとめ<br>静的サイトのジェネレータとしてgulpを使う事が多いので、100枚以上あるhtmlファイルの生成とか画像ファイルの生成にかかる時間が劇的に減りました。<br>※ちなみに、gruntにも同様のプラグイン(grunt-newer)があります。</p>
+<p>参考<br><a href="https://www.npmjs.com/package/gulp-newer" target="_blank" rel="external">gulp-newer</a><br><a href="http://laravel.io/forum/04-03-2014-how-to-handle-development-and-production-assets-with-gulp" target="_blank" rel="external">How to handle development and production assets with gulp?</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;###更新したファイルだけをタスクの対象に&lt;/p&gt;
+&lt;p&gt;gulpでファイルの自動生成をする時、対象ファイルの数が増えてくると生成に時間がかかってツラい感じになってきます。&lt;br&gt;&lt;code&gt;gulp-newer&lt;/code&gt;を使えば更新した差分ファイルのみをタスクの対象に
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
+    
+      <category term="gulp" scheme="https://kogai.github.io/tags/gulp/"/>
+    
+      <category term="browser" scheme="https://kogai.github.io/tags/browser/"/>
+    
+      <category term="coffeescript" scheme="https://kogai.github.io/tags/coffeescript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Node.jsでReact.jsのサーバーサイドレンダリング</title>
+    <link href="https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/"/>
+    <id>https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/</id>
+    <published>2015-04-09T15:00:00.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Reactjsでwebアプリケーションを作る時に良いことの一つには、サーバーサイドレンダリングが自然な感じで出来るということがあるかと思います。</p>
+<p>基本的に違いは2つだけみたいです。</p>
+<ul>
+<li>renderメソッドの代わりにrenderToString(特殊な状況ではrenderToStaticMarkUp)を使う</li>
+<li>描画対象のDOMノードは指定しない</li>
+</ul>
+<p>こんな感じで試してみました。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> React = <span class="built_in">require</span>(<span class="string">'react'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> ServerSide = React.createClass(&#123;</div><div class="line">  <span class="attr">render</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello! React-Server-Side-Rendering.<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = React.renderToString(<span class="xml"><span class="tag">&lt;<span class="name">ServerSide</span> /&gt;</span>);</span></div><div class="line"></div><div class="line">// クライアントサイドだとこんな感じでDOMノードを指定してrenderしている</div><div class="line">// React.render(<span class="tag">&lt;<span class="name">ServerSide</span> /&gt;</span>, document.body);</div></pre></td></tr></table></figure></p>
+<p>###gulp<br>jsxで書いていたら、jsにコンパイルしてあげる必要があります。<br>上のファイルを、例えばgulpでこんな感じにコンパイルしてあげます。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">'default'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'エントリーポイントへのパス'</span>)</div><div class="line">  .pipe(react())</div><div class="line">  .pipe(gulp.dest(<span class="string">'生成先のディレクトリ'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>###サーバー側<br><a href="http://hapijs.com/" target="_blank" rel="external">Hapi</a>を使ってサーバーを立てています。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Hapi = <span class="built_in">require</span>(<span class="string">'hapi'</span>);</div><div class="line"><span class="keyword">var</span> server = <span class="keyword">new</span> Hapi.Server();</div><div class="line"><span class="keyword">var</span> ServerSide = <span class="built_in">require</span>(<span class="string">'gulpで生成したファイルへのパス'</span>);</div><div class="line"></div><div class="line">server.connection(&#123;</div><div class="line">  <span class="attr">host</span>: <span class="string">'localhost'</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">3000</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params"> req, reply </span>) </span>&#123;</div><div class="line">    <span class="comment">// React.renderToStringで生成したDOMノードをレスポンスとして返します。</span></div><div class="line">    reply(ServerSide);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.start();</div></pre></td></tr></table></figure>
+<p>これならクライアントサイドの延長で記述できそうで素敵です。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Reactjsでwebアプリケーションを作る時に良いことの一つには、サーバーサイドレンダリングが自然な感じで出来るということがあるかと思います。&lt;/p&gt;
+&lt;p&gt;基本的に違いは2つだけみたいです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;renderメソッドの代わりにrenderToStr
+    
+    </summary>
+    
+    
+      <category term="server" scheme="https://kogai.github.io/tags/server/"/>
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="browser" scheme="https://kogai.github.io/tags/browser/"/>
+    
+      <category term="react.js" scheme="https://kogai.github.io/tags/react-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>kindlie化された書籍の通知サービスを作った</title>
+    <link href="https://kogai.github.io/2015/03/30/2015-03-23-kindlizeit/"/>
+    <id>https://kogai.github.io/2015/03/30/2015-03-23-kindlizeit/</id>
+    <published>2015-03-29T15:00:00.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>##概要<br><a href="http://kindlize.it" target="_blank" rel="external">kindlize.it</a></p>
+<p>Amazonで書籍を買おうとした時に、kindle化されていない時がままあります。<br>電子書籍の普及は進んできたとは言え、多くの書籍は電子化されていないというのが現状です。<br>またシリーズものなどで、”最新刊の一つ前の刊まで”の条件付けでしか電子化しない出版社もあります。(集英社ことだが)</p>
+<p>そんなわけで、kindle化を待っている本が山ほどあるという人も多いのではないでしょうか。<br>私は今までkindle化されていない書籍を欲しいものリストに入れおいて『あの本はkindle化されたかな〜』と定期的に見に行くということをしていました。<br>実に面倒くさい。</p>
+<p>そこで目当ての本がkindle化されたらメール通知を送ってくれるサービスを作りました。<br>アカウントを作成して、目当ての書籍を検索&amp;登録しておくとkindle化された時にメールが来ます。</p>
+<p>##使ったもの<br>特に意識してたわけではないのですが、自分が使えるものから選んでいったら自然とMEANスタックになってました。<br>他のスタックが出来ないとも言います。</p>
+<ul>
+<li>Node.js</li>
+<li>Express</li>
+<li>MongoDB</li>
+<li>Angular.js</li>
+<li>DigitalOcean</li>
+</ul>
+<p>##これから<br>今は登録した書籍のkindle化通知しかしてくれないので、いずれは過去に登録した書籍の新刊が出たら通知するようにしたいです。</p>
+<p>###反省<br>検証している時に読みたいkindle本をたくさん見つけてしまい、結構買ってしまった…。<br>自分で自分の首を絞めるサービスになっている気がしないでもないです。</p>
+<p>そんなわけで、よかったら使ってみて下さい。</p>
+<p><a href="http://kindlize.it" target="_blank" rel="external">kindlize.it</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;##概要&lt;br&gt;&lt;a href=&quot;http://kindlize.it&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;kindlize.it&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Amazonで書籍を買おうとした時に、kindle化されていない時がままあります。&lt;br&gt;電
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="作ったもの" scheme="https://kogai.github.io/tags/%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%82%E3%81%AE/"/>
+    
+      <category term="mongoDB" scheme="https://kogai.github.io/tags/mongoDB/"/>
+    
+      <category term="angular.js" scheme="https://kogai.github.io/tags/angular-js/"/>
+    
+      <category term="express" scheme="https://kogai.github.io/tags/express/"/>
+    
+      <category term="kindle" scheme="https://kogai.github.io/tags/kindle/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>circleCIのテストがnodev0.12で失敗する</title>
+    <link href="https://kogai.github.io/2015/03/19/2015-03-19-modify-yml/"/>
+    <id>https://kogai.github.io/2015/03/19/2015-03-19-modify-yml/</id>
+    <published>2015-03-18T15:00:00.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>nodejs</code>の<code>v0.12</code>を使ってるプロジェクトでcircleCIのテストが通りませんでした。<br>手元のテストは成功しているのですが。。。</p>
+<p>####こんな感じのエラー<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Uncaught Error: Module did not self-register.</div><div class="line">   at Error (native)</div><div class="line">   at Module.load (module.js:355:32)</div><div class="line">   at Function.Module._load (module.js:310:12)</div><div class="line">   at Module.require (module.js:365:17)</div><div class="line">   at require (module.js:384:17)</div></pre></td></tr></table></figure></p>
+<h4 id="困ったときのStackOverflow"><a href="#困ったときのStackOverflow" class="headerlink" title="困ったときのStackOverflow"></a>困ったときのStackOverflow</h4><p><a href="http://stackoverflow.com/questions/28486891/uncaught-error-module-did-not-self-register" target="_blank" rel="external">Uncaught Error: Module did not self-register</a></p>
+<p>事前に<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm rebuild</div></pre></td></tr></table></figure></p>
+<p>すれば良いみたい。</p>
+<p><code>circle.yml</code>をこんな感じにして解決。<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attr">dependencies:</span></div><div class="line"><span class="attr">  override:</span></div><div class="line"><span class="bullet">    -</span> <span class="string">npm</span> <span class="string">install</span></div><div class="line"><span class="bullet">    -</span> <span class="string">npm</span> <span class="string">rebuild</span></div></pre></td></tr></table></figure></p>
+<p>ローカルマシンでも同様のエラーを吐く時があるけど、<br>同じように<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm rebuild</div></pre></td></tr></table></figure></p>
+<p>してあげれば解決するっぽいです。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;nodejs&lt;/code&gt;の&lt;code&gt;v0.12&lt;/code&gt;を使ってるプロジェクトでcircleCIのテストが通りませんでした。&lt;br&gt;手元のテストは成功しているのですが。。。&lt;/p&gt;
+&lt;p&gt;####こんな感じのエラー&lt;br&gt;&lt;figure class=&quot;h
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
+    
+      <category term="circleCI" scheme="https://kogai.github.io/tags/circleCI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>git-diffで差分ファイルのみをarchive.zipにする</title>
+    <link href="https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/"/>
+    <id>https://kogai.github.io/2015/03/17/2015-03-17-git-diff-and-archive/</id>
+    <published>2015-03-16T15:00:00.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="やりたいこと"><a href="#やりたいこと" class="headerlink" title="やりたいこと"></a>やりたいこと</h2><ul>
+<li>クライアント案件で、本番サーバーへのアクセス権がない。</li>
+<li>更新作業の際には差分ファイルのみを納品するように要求されている。</li>
+</ul>
+<h2 id="git-archiveで差分抽出"><a href="#git-archiveで差分抽出" class="headerlink" title="git archiveで差分抽出"></a>git archiveで差分抽出</h2><p><code>git archive</code>コマンドで、前回納品時との<code>diff</code>を抽出して<code>zip</code>化する</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git archive --format=zip HEAD `git diff master --name-only` -o archive.zip</div></pre></td></tr></table></figure>
+<p><code>git diff</code>で<code>master</code>ブランチ(前回納品時の状態を想定)との差分ファイルリストを取得して、<code>git archive</code>に渡してあげる。<br>これでアーカイブ化できました。</p>
+<h2 id="–diff-filterを使う"><a href="#–diff-filterを使う" class="headerlink" title="–diff-filterを使う"></a>–diff-filterを使う</h2><p>上記の手法だと差分の中に削除したファイルも含まれてしまい、以下のエラーメッセージが出ます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fatal: pathspec &apos;path/to/not/exist/file&apos; did not match any files</div></pre></td></tr></table></figure>
+<p>削除したファイルは<code>git archive</code>対象のリストに渡らないようにすれば良さそうです。<br><a href="http://git-scm.com/docs/git-diff" target="_blank" rel="external">公式ドキュメントのgit-diffのページ</a>を見ると、<code>--diff-filter</code>というオプションがありました。</p>
+<blockquote>
+<p>Select only files that are Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R)</p>
+</blockquote>
+<p>このオプションを使って追加したファイル(A)と編集したファイル(M)だけにフィルタリングされたリストが作れそうです。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git archive --format=zip HEAD `git diff master --name-only --diff-filter=AM` -o archive.zip</div></pre></td></tr></table></figure>
+<p>これでOK。<br>困ったときは公式ドキュメントに限りますね。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;やりたいこと&quot;&gt;&lt;a href=&quot;#やりたいこと&quot; class=&quot;headerlink&quot; title=&quot;やりたいこと&quot;&gt;&lt;/a&gt;やりたいこと&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;クライアント案件で、本番サーバーへのアクセス権がない。&lt;/li&gt;
+&lt;li&gt;更新作業の際には差分フ
+    
+    </summary>
+    
+    
+      <category term="git" scheme="https://kogai.github.io/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HEXOに移行することにした</title>
+    <link href="https://kogai.github.io/2015/03/12/2015-03-12-greeting/"/>
+    <id>https://kogai.github.io/2015/03/12/2015-03-12-greeting/</id>
+    <published>2015-03-11T15:00:00.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>今までブログとして使っていた<a href="http://postach.io/site" target="_blank" rel="external">postach.io</a>が無償版を停止することにしたらしい。<br>EverNoteから投稿出来るのが気に入って使っていたけど、<a href="http://postach.io/site/pricing" target="_blank" rel="external">月額9$</a>は高いな〜<br>ということで、ブログを移行することにした。</p>
+<p><code>markdown</code>で書けて、無料で使えるという条件で、<code>Octopress</code>と<code>Hexo</code>を試してみた。<br><code>Hexo</code>は<code>node.js</code>ベースなのでこちらを選びました。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'hello, world!'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>hello, world!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>とても使いやすそう。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今までブログとして使っていた&lt;a href=&quot;http://postach.io/site&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;postach.io&lt;/a&gt;が無償版を停止することにしたらしい。&lt;br&gt;EverNoteから投稿出来るのが気に入って使
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>vue.jsでjqueryのpluginを使ってみる</title>
+    <link href="https://kogai.github.io/2015/03/09/2015-03-09-vuejs-plus-jquery-plugin/"/>
+    <id>https://kogai.github.io/2015/03/09/2015-03-09-vuejs-plus-jquery-plugin/</id>
+    <published>2015-03-09T04:51:56.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>業務でIE9〜の案件が降ってきたので、vue.jsを使ってみた。<br>よくあるスライド切替をvue.js + jQuery + jQuery.bxSliderで。</p>
+<h4 id="スライド画像が繰り返される部分にv-repeatを設定"><a href="#スライド画像が繰り返される部分にv-repeatを設定" class="headerlink" title="スライド画像が繰り返される部分にv-repeatを設定"></a>スライド画像が繰り返される部分に<code>v-repeat</code>を設定</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ul(id=&apos;slide&apos;)</div><div class="line">  li(v-repeat=&apos;photos&apos;)</div><div class="line">    img(src=&quot;&#123;&#123;photo&#125;&#125;&quot;, alt=&quot;&#123;&#123;title&#125;&#125;&quot;)</div></pre></td></tr></table></figure>
+<h4 id="vue-jsで要素を描画してからjQueryプラグインを適用"><a href="#vue-jsで要素を描画してからjQueryプラグインを適用" class="headerlink" title="vue.jsで要素を描画してからjQueryプラグインを適用"></a><code>vue.js</code>で要素を描画してからjQueryプラグインを適用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> slide = <span class="keyword">new</span> Vue(&#123;</div><div class="line">  <span class="attr">el</span>: <span class="string">'#slide'</span>,</div><div class="line">  <span class="attr">data</span>: &#123;</div><div class="line">    <span class="attr">photos</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="string">"photo"</span>: <span class="string">"画像1のパス"</span>,</div><div class="line">        <span class="string">"title"</span>: <span class="string">"画像1の名前"</span></div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="string">"photo"</span>: <span class="string">"画像2のパス"</span>,</div><div class="line">        <span class="string">"title"</span>: <span class="string">"画像2の名前"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line">jQuery(<span class="string">"#slide"</span>).bxSlider();</div></pre></td></tr></table></figure>
+<p>これで行けました。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;業務でIE9〜の案件が降ってきたので、vue.jsを使ってみた。&lt;br&gt;よくあるスライド切替をvue.js + jQuery + jQuery.bxSliderで。&lt;/p&gt;
+&lt;h4 id=&quot;スライド画像が繰り返される部分にv-repeatを設定&quot;&gt;&lt;a href=&quot;#スライ
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="https://kogai.github.io/tags/javascript/"/>
+    
+      <category term="vue.js" scheme="https://kogai.github.io/tags/vue-js/"/>
+    
+      <category term="jQuery" scheme="https://kogai.github.io/tags/jQuery/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gruntのプラグインを作って公開してみた</title>
+    <link href="https://kogai.github.io/2015/02/12/2015-03-09-tails-about-published-grunt-plugin/"/>
+    <id>https://kogai.github.io/2015/02/12/2015-03-09-tails-about-published-grunt-plugin/</id>
+    <published>2015-02-12T04:43:41.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>現在担当している業務で、ちょっとしたタスクが出てきた。<br>あるJSONファイルのデータを元に、別のJSONファイルを生成するというものだ。</p>
+<p>イメージはこんな感じ。</p>
+<p><code>元のJSONファイルの内容(src.json)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  &#123;</div><div class="line">    <span class="string">"foo"</span>: <span class="string">"bar"</span></div><div class="line">  &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p><code>生成したJSONファイルの内容(dest.json)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">&#123;</div><div class="line"><span class="string">"foo"</span>: <span class="string">"bar"</span>,</div><div class="line"><span class="string">"baz"</span>: <span class="string">"foobar"</span></div><div class="line">&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>元のJSONファイルを編集するたびに生成先のJSONを編集するとかやってられないので、gruntプラグインで目的に合致しているものがないか探したがなかった。（このプラグインで出来るよというのあったら教えて下さい！）</p>
+<p>そこでnode.jsのfsモジュールを使ってJSONファイル(<code>dest.json</code>)を生成するコードを書いて、grunt-shellで逐次実行するようにした。</p>
+<p>しばらくそれで問題なかったが、よくよく考えるとshellで逐次実行しなくても、gruntプラグインとして直接実行できるのでは？と気付いた。<br>調べてみると、使っていたnode.jsのコードをちょっと変えるだけでgruntプラグインとして公開出来そうだったので、試してみた。</p>
+<p>Qiitaのこの記事を参考にした。<br><a href="http://qiita.com/fnobi/items/5590e7e92b4f2bd81d04" target="_blank" rel="external">grunt-pluginの作り方と解剖</a></p>
+<p>作ったものがこちら<br><a href="https://www.npmjs.com/package/grunt-json-extend" target="_blank" rel="external">grunt-json-extend</a></p>
+<p>自分以外に使う人はいなかろう、と思いつつ公開したが、日に数回程はダウンロードされている模様。<br>ダウンロード結果の解析は見れないっぽいのでどういう目的で使われているのか全然わからないが、誰かの役に立っているのなら嬉しいな。<br>使ったことある人、もしこのブログを見ていたらどんな使い方をしているか教えて下さい。</p>
+<p>ちなみにこのプラグインを公開したちょっと後にgulpを初めて使ってみて<code>gulpfile.js</code>の短さに感動してしまったので、<br>今後の新規案件では<code>gulp</code>でタスク処理するようになると思います。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;現在担当している業務で、ちょっとしたタスクが出てきた。&lt;br&gt;あるJSONファイルのデータを元に、別のJSONファイルを生成するというものだ。&lt;/p&gt;
+&lt;p&gt;イメージはこんな感じ。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;元のJSONファイルの内容(src.json)&lt;/code&gt;&lt;/p
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+      <category term="grunt" scheme="https://kogai.github.io/tags/grunt/"/>
+    
+      <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DigitalOceanでNode.jsのサーバーを立てる初期設定メモ</title>
+    <link href="https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/"/>
+    <id>https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/</id>
+    <published>2014-12-23T02:58:02.000Z</published>
+    <updated>2017-03-22T04:40:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="ターミナルからログイン"><a href="#ターミナルからログイン" class="headerlink" title="ターミナルからログイン"></a>ターミナルからログイン</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh root@IP</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="Ubuntu版"><a href="#Ubuntu版" class="headerlink" title="Ubuntu版"></a>Ubuntu版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install nodejs</div><div class="line">sudo apt-get install npm</div><div class="line">sudo apt-get install git</div><div class="line">npm install -g bower</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="CentOS版"><a href="#CentOS版" class="headerlink" title="CentOS版"></a>CentOS版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">yum update</div><div class="line">curl -sL https://rpm.nodesource.com/setup | bash -</div><div class="line">yum install -y nodejs</div><div class="line">yum install git</div><div class="line">npm install -g bower</div></pre></td></tr></table></figure>
+<h3 id="gitデプロイつなぎ込み"><a href="#gitデプロイつなぎ込み" class="headerlink" title="gitデプロイつなぎ込み"></a>gitデプロイつなぎ込み</h3><p><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-automatic-deployment-with-git-with-a-vps" target="_blank" rel="external">解説記事</a></p>
+<ol>
+<li><code>/var/repo/site.git/</code> を作成して <code>git init —bare</code></li>
+<li><code>/var/repo/site.git/hooks/</code> へ移動</li>
+<li><code>cat &gt; post-receive</code> で<code>post-receive</code>ファイルを作成</li>
+<li><p><code>vim</code>モードにするなどして以下記入<code>:x</code>で保存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">git --work-tree=/var/www/ディレクトリ名 --git-dir=/var/repo/site.git checkout <span class="_">-f</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>chmod +x post-receive</code></p>
+</li>
+<li><p>ローカルレポジトリにgitパスをつなぎ込み</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote add product ssh://root@IP/var/repo/site.git</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>SSHキー</code>の登録（新規アカウント作成時のみ）</p>
+</li>
+<li><p>プッシュしてデプロイ</p>
+</li>
+</ol>
+<h3 id="サーバー永続化"><a href="#サーバー永続化" class="headerlink" title="サーバー永続化"></a>サーバー永続化</h3><p><code>npm</code>の<code>pm2</code>をインストール<br><code>pm2 start app.js</code> でサーバー永続化</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;ターミナルからログイン&quot;&gt;&lt;a href=&quot;#ターミナルからログイン&quot; class=&quot;headerlink&quot; title=&quot;ターミナルからログイン&quot;&gt;&lt;/a&gt;ターミナルからログイン&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;tabl
+    
+    </summary>
+    
+    
+      <category term="server" scheme="https://kogai.github.io/tags/server/"/>
+    
+      <category term="digitalocean" scheme="https://kogai.github.io/tags/digitalocean/"/>
+    
+      <category term="git" scheme="https://kogai.github.io/tags/git/"/>
+    
+      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+</feed>

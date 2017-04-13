@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Reactとredux-Observableでショッピングカートアプリを作ってみる話 | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="これはReact Advent Calendar 2016の第1日目の記事です。
+夏頃からRxJSで状態を管理してReactで描画するようなアプリケーションを作っていました。RxJSに限らず、(F)RP系ライブラリの導入に際して、導入のメリットが分かりづらいという話があります。難しい(そうに見える)新しいことを覚えてまで導入するほどのメリットがあるようには思えない、みたいな意見です。特にライブラリ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reactとredux-Observableでショッピングカートアプリを作ってみる話">
+<meta property="og:url" content="https://kogai.github.io/2016/11/30/sample-redux-observable/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="これはReact Advent Calendar 2016の第1日目の記事です。
+夏頃からRxJSで状態を管理してReactで描画するようなアプリケーションを作っていました。RxJSに限らず、(F)RP系ライブラリの導入に際して、導入のメリットが分かりづらいという話があります。難しい(そうに見える)新しいことを覚えてまで導入するほどのメリットがあるようには思えない、みたいな意見です。特にライブラリ">
+<meta property="og:updated_time" content="2017-03-22T04:40:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Reactとredux-Observableでショッピングカートアプリを作ってみる話">
+<meta name="twitter:description" content="これはReact Advent Calendar 2016の第1日目の記事です。
+夏頃からRxJSで状態を管理してReactで描画するようなアプリケーションを作っていました。RxJSに限らず、(F)RP系ライブラリの導入に際して、導入のメリットが分かりづらいという話があります。難しい(そうに見える)新しいことを覚えてまで導入するほどのメリットがあるようには思えない、みたいな意見です。特にライブラリ">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-sample-redux-observable" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/11/30/sample-redux-observable/" class="article-date">
+  <time datetime="2016-11-30T14:16:37.000Z" itemprop="datePublished">2016-11-30</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Reactとredux-Observableでショッピングカートアプリを作ってみる話
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/11/30/sample-redux-observable/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/11/30/sample-redux-observable/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>これは<a href="http://qiita.com/advent-calendar/2016/react" target="_blank" rel="external">React Advent Calendar 2016</a>の第1日目の記事です。</p>
+<p>夏頃から<code>RxJS</code>で状態を管理して<code>React</code>で描画するようなアプリケーションを作っていました。<br><code>RxJS</code>に限らず、(F)RP系ライブラリの導入に際して、導入のメリットが分かりづらいという話があります。<br>難しい(そうに見える)新しいことを覚えてまで導入するほどのメリットがあるようには思えない、みたいな意見です。<br>特にライブラリのレポジトリに上がっているExampleアプリのような(例えばTODOアプリとか)ものだと、単に複雑性が増しているように見えるということもあります。</p>
+<p>これについて、<a href="https://www.manning.com/books/functional-reactive-programming" target="_blank" rel="external">Functional Reactive Programming</a>という本に、(F)RPは小さく単純なアプリケーションでサンプルを作ってもメリットが見えてこない、機能同士に複雑な依存関係があるような複雑なアプリケーションになって、はじめてその真価がわかってくる、というようなことが書いてありました。<br>(この本ではガソリン給油機アプリを想定して、ハイオク・レギュラーを給油しつつ、価格の最大値まで給油するみたいな仕組みを実装していました)</p>
+<p>この意見は、実際にアプリケーションを作った上での実感にも近いように思います。<br>そこでこの記事では<code>redux</code>のレポジトリにあるサンプルアプリケーションを元にちょっと複雑な仕様を足してみて、<code>RxJS</code>の導入メリットが分かりやすくなることを目指したいと思います。</p>
+<p>こんな手順で進めます。</p>
+<ol>
+<li><code>redux</code>のチュートリアルからサンプルアプリケーションを見繕ってコードと構造をザッと把握する</li>
+<li><code>1</code>で選んだサンプルアプリケーションの非同期処理部分を<code>RxJS</code>ベースの<code>redux</code>ミドルウェアである<a href="https://github.com/redux-observable/redux-observable" target="_blank" rel="external">redux-observable</a>で差し替える</li>
+<li>現実にあってもおかしくなさそうな仕様を足してみて、<code>RxJS</code>が複雑さを吸収できていそうか見てみる</li>
+</ol>
+<h2 id="reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る"><a href="#reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る" class="headerlink" title="reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る"></a>reduxのチュートリアルにあるサンプルアプリケーションをクローンしてきてざっと見る</h2><p><a href="https://github.com/reactjs/redux/tree/master/examples" target="_blank" rel="external">reduxレポジトリのexamplesディレクトリ</a>にいくつかサンプルアプリケーションがあります。<br>この中で、非同期な通信の処理が入って現実のアプリケーションを想像しやすく、適度にシンプルな「ショッピングカート」アプリケーションを元にして進めてみたいと思います。</p>
+<p><a href="]https://github.com/kogai/sample-redux-observable/tree/redux-thunk">最初はこんな状態です</a><br><a href="アプリケーションの姿">https://www.evernote.com/l/AKiS90K33WFMOLWsEwDhEZSeLhagkl2xJkYB/image.png</a></p>
+<p>図のように、<code>Products</code>を在庫の許す限り<code>Cart</code>に投入できて、<code>Cart</code>の内容によって支払い総額が変わる、といったアプリケーションです。<br>非同期アクションを<code>redux-thunk</code>で<code>action creator</code>の中にdispatcherを流し込んで実現しているという、シンプルなアプリケーションとしてはわりとよくある感じの実装になっているようです。<br>※サーバ側の実装は煩雑さを避けるために、単なるjsonファイルとsetTimeoutで、非同期にレスポンスが返ってくることだけを表現しています。</p>
+<h2 id="サンプルアプリを、redux-observableで再実装してみる"><a href="#サンプルアプリを、redux-observableで再実装してみる" class="headerlink" title="サンプルアプリを、redux-observableで再実装してみる"></a>サンプルアプリを、redux-observableで再実装してみる</h2><p>では次に、このアプリケーションの<code>redux-thunk</code>を用いている部分を<code>redux-observable</code>に置き換えてみます。<br>まだこの時点では、<code>RxJS</code>を用いるメリットよりもデメリットの方が多いはずです。</p>
+<p><a href="https://github.com/kogai/sample-redux-observable/tree/redux-observable" target="_blank" rel="external">次はこういう状態にします</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// actions/index.js</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> types <span class="keyword">from</span> <span class="string">'../constants/ActionTypes'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> fetchAllProducts = <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.FETCH_PRODUCTS</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> receiveAllProducts = <span class="function"><span class="params">products</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.RECEIVE_PRODUCTS,</div><div class="line">  products</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> addToCart = <span class="function"><span class="params">productId</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.ADD_TO_CART_UNSAFE,</div><div class="line">  productId</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> receiveInCart = <span class="function"><span class="params">productId</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.ADD_TO_CART,</div><div class="line">  productId</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> checkout = <span class="function"><span class="params">products</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.CHECKOUT_REQUEST,</div><div class="line">  products,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> checkoutSuccess = <span class="function"><span class="params">cart</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">type</span>: types.CHECKOUT_SUCCESS,</div><div class="line">  cart,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// epics/index.js</span></div><div class="line"><span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">"rxjs"</span>;</div><div class="line"><span class="keyword">import</span> shop <span class="keyword">from</span> <span class="string">'../api/shop'</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> types <span class="keyword">from</span> <span class="string">'../constants/ActionTypes'</span></div><div class="line"><span class="keyword">import</span> &#123;receiveAllProducts, receiveInCart, checkoutSuccess&#125; <span class="keyword">from</span> <span class="string">'../actions'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> allProductsEpic = <span class="function">(<span class="params">action$</span>) =&gt;</span> action$</div><div class="line">  .ofType(types.FETCH_PRODUCTS)</div><div class="line">  .mergeMap(<span class="function"><span class="params">_</span> =&gt;</span> Observable.bindCallback(shop.getProducts)())</div><div class="line">  .map(receiveAllProducts)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> addToCartEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> action$</div><div class="line">  .ofType(types.ADD_TO_CART_UNSAFE)</div><div class="line">  .map(<span class="function">(<span class="params">&#123;productId&#125;</span>) =&gt;</span> productId)</div><div class="line">  .filter(<span class="function"><span class="params">productId</span> =&gt;</span> store.getState().products.byId[productId].inventory &gt; <span class="number">0</span>)</div><div class="line">  .map(receiveInCart)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> checkoutEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> action$</div><div class="line">  .ofType(types.CHECKOUT_REQUEST)</div><div class="line">  .map(<span class="function">(<span class="params">&#123;products&#125;</span>) =&gt;</span> products)</div><div class="line">  .mergeMap(<span class="function"><span class="params">products</span> =&gt;</span> Observable.bindCallback(shop.buyProducts)(products))</div><div class="line">  .map(<span class="function"><span class="params">_</span> =&gt;</span> store.getState().cart)</div><div class="line">  .map(checkoutSuccess)</div></pre></td></tr></table></figure>
+<p>大きく変わっているのは、<code>redux-thunk</code>を用いて<code>action creator</code>の中で表現していた非同期処理を、<code>Epic</code>と呼ばれる別の構造の中で宣言することで、<code>action creator</code>が純粋で同期的な関数に戻っていることです。<br><code>Epic</code>とは<code>redux-observable</code>が提供する構造で、私は<code>redux</code>の世界に<code>RxJS</code>の<code>Observable</code>を組み込むためのもの、みたいに解釈しています。<br><code>redux-observable</code>のドキュメントには</p>
+<blockquote>
+<p>It is a function which takes a stream of actions and returns a stream of actions. Actions in, actions out.<br>You can think of it of having roughly this type signature:<br><code>function (action$: Observable&lt;Action&gt;, store: Store): Observable&lt;Action&gt;;</code></p>
+</blockquote>
+<p>とあります。<br><code>action</code>の<code>Observable</code>を受け取って、変性・フィルタリングなどを加えた<code>action</code>の<code>Observable</code>を返す関数である<code>Epic</code>を<code>Middleware</code>として<code>redux</code>の世界の中に組み込んでいる感じのようです。</p>
+<h2 id="仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る"><a href="#仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る" class="headerlink" title="仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る"></a>仕様をいくつか足して、アプリ仕様を複雑にしてみて、Rxが複雑性を吸収する様を見る</h2><p>さて、ここまでだとコードが減っているわけではないですし、あまりメリットが見えて来ないかも知れません。(<code>action</code>が純粋で同期的な関数からのみ生成されるようにはなりましたが。。。)<br>そこで(F)RP的なメリットが見えやすいように、機能同士に複雑な依存関係が必要になるような仕様を追加してみたいと思います。</p>
+<p>例えば今の仕様だと「カートの中身」は「商品のIDを投げる<code>action</code>」のみに依存しています。<br>これを別の<code>action</code>にも同時に依存しなければならないようにしてみたいと思います。</p>
+<p>こんな仕様です。</p>
+<ul>
+<li>3個の商品を購入すると支払い総額から1割値引きされる</li>
+<li>購入しようとしているユーザには通常会員・プレミアム会員の2種があり、属性によって割引率が変わる</li>
+<li>購入した商品の総額によって、割引率が増える</li>
+</ul>
+<p>こうなると、「カートの中身」とは「商品のIDを投げるAction」に加えて「ユーザの属性を投げる<code>action</code>」に依存したものになります。</p>
+<p>実際にコードに起こしたものはこういう感じです。<br><a href="https://github.com/kogai/sample-redux-observable/tree/redux-obsrvable-complicated" target="_blank" rel="external">少しだけ複雑なアプリケーション</a></p>
+<p>まず「カートの中身」を<code>Epic</code>にします。<br><code>cart reducer</code>に定義されていた「カートの中身とは、ADD_TO_CARTアクションで渡ってくる商品IDをとりまとめたもの」という定義を<code>Epic</code>として再定義する感じです。<br>ですので、<code>Epic</code>の中に定義された関数は、<code>reducers/index.js</code>に定義されていたユーティリティ関数を少し改修したものが多いです。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> cartEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> productId$ = Observable.merge(</div><div class="line">    action$.ofType(ADD_TO_CART).map(<span class="function">(<span class="params">&#123; productId &#125;</span>) =&gt;</span> productId),</div><div class="line">    action$.ofType(CHECKOUT_REQUEST).mapTo(<span class="literal">null</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">const</span> addedIds$ = productId$</div><div class="line">    .scan(<span class="function">(<span class="params">addedIds, id</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">if</span> (id === <span class="literal">null</span>) &#123;</div><div class="line">          <span class="keyword">return</span> []</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> addedIds.indexOf(id) !== <span class="number">-1</span> ? addedIds : [...addedIds, id]</div><div class="line">      &#125;, [])</div><div class="line"></div><div class="line">  <span class="keyword">const</span> quantityById$ = productId$</div><div class="line">    .scan(<span class="function">(<span class="params">quantityById, id</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (id === <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> &#123;&#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> &#123; ...quantityById, [id]: (quantityById[id] || <span class="number">0</span>) + <span class="number">1</span> &#125;</div><div class="line">    &#125;, &#123;&#125;)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> Observable</div><div class="line">    .combineLatest(addedIds$, quantityById$, (addedIds, quantityById) =&gt; (&#123;addedIds, quantityById&#125;))</div><div class="line">    .map(<span class="function">(<span class="params">&#123;addedIds, quantityById&#125;</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">const</span> &#123;byId&#125; = store.getState().products</div><div class="line"></div><div class="line">      <span class="keyword">const</span> total = addedIds</div><div class="line">          .reduce(<span class="function">(<span class="params">acc, id</span>) =&gt;</span> acc + byId[id].price * (quantityById[id] || <span class="number">0</span>), <span class="number">0</span>)</div><div class="line">          .toFixed(<span class="number">2</span>)</div><div class="line"></div><div class="line">      <span class="keyword">const</span> products = addedIds</div><div class="line">          .map(<span class="function"><span class="params">id</span> =&gt;</span> (&#123;</div><div class="line">            ...byId[id],</div><div class="line">            <span class="attr">quantity</span>: quantityById[id] || <span class="number">0</span>,</div><div class="line">          &#125;))</div><div class="line"></div><div class="line">      <span class="keyword">return</span> updateCart(&#123;</div><div class="line">        total,</div><div class="line">        products</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>次にアプリケーションにおける「ユーザー」を定義します。<br>まず既存の実装をベースに、偽のAPIレスポンス関数を用意します。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// こんなレスポンスを返すAPIを想定しています</div><div class="line">&#123;</div><div class="line">  "userType": 1, // 通常会員には0、プレミアム会員には1を返します</div><div class="line">  "amount": 499 // そのユーザーの、今までの購買額を返します</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> getUser = <span class="function"><span class="params">cb</span> =&gt;</span> setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> cb(_user), TIMEOUT)</div></pre></td></tr></table></figure>
+<p>更にユーザー情報を<code>Epic</code>として定義して、ユーザー情報の取得(必要なら更新も)をアプリケーションに組み込みます。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> userEpic = <span class="function"><span class="params">action$</span> =&gt;</span> action$</div><div class="line">  .ofType(ON_LOAD)</div><div class="line">  .mergeMap(<span class="function"><span class="params">_</span> =&gt;</span> Observable.bindCallback(getUser)())</div><div class="line">  .map(recieveUser)</div></pre></td></tr></table></figure>
+<p>最後に、割引率の算出ロジックを実装します。<br>まず<code>userEpic</code>がユーザー属性と購買総額に応じた割引率を取得できるように変更します。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> userEpic = <span class="function"><span class="params">action$</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> user$ = action$</div><div class="line">    .ofType(ON_LOAD)</div><div class="line">    .mergeMap(<span class="function"><span class="params">_</span> =&gt;</span> Observable.bindCallback(getUser)())</div><div class="line"></div><div class="line">  <span class="keyword">const</span> total$ = action$</div><div class="line">    .ofType(CHECKOUT_REQUEST)</div><div class="line">    .map(<span class="function">(<span class="params">&#123;total&#125;</span>) =&gt;</span> (&#123; <span class="attr">amount</span>: <span class="built_in">Number</span>(total) &#125;))</div><div class="line"></div><div class="line">  <span class="keyword">return</span> user$</div><div class="line">    .merge(total$)</div><div class="line">    .scan(<span class="function">(<span class="params">acc, next</span>) =&gt;</span> (&#123;</div><div class="line">      <span class="attr">amount</span>: acc.amount + next.amount,</div><div class="line">      <span class="attr">userType</span>: acc.userType,</div><div class="line">    &#125;))</div><div class="line">    .map(<span class="function"><span class="params">user</span> =&gt;</span> (&#123;</div><div class="line">      ...user,</div><div class="line">      <span class="comment">// プレミアムユーザー・支払い総額が1000ドルを超えるユーザーはそれぞれ割引率が追加される</span></div><div class="line">      discountRate: (user.userType === UserTypes.PREMIUM ? <span class="number">0.1</span> : <span class="number">0</span>) + (user.amount &gt; <span class="number">1000</span> ? <span class="number">0.1</span> : <span class="number">0</span>)</div><div class="line">    &#125;))</div><div class="line">    .map(recieveUser)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>次に<code>userEpic</code>が生成する「割引率」を「カートの中身」に混ぜ込みます。<br>これで最終的な割引率を加味した購入額をカートのチェックアウトの際に取得できるようになります。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> cartEpic = <span class="function">(<span class="params">action$, store</span>) =&gt;</span> &#123;</div><div class="line">  <span class="comment">// ...略</span></div><div class="line">  <span class="keyword">const</span> discountRate$ = action$.ofType(RECEIVE_USER).pluck(<span class="string">"discountRate"</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> Observable</div><div class="line">    .combineLatest(addedIds$, quantityById$, discountRate$, (addedIds, quantityById, userDiscountRate) =&gt; (&#123;addedIds, quantityById, userDiscountRate&#125;))</div><div class="line">    .map(<span class="function">(<span class="params">&#123;addedIds, quantityById, userDiscountRate&#125;</span>) =&gt;</span> &#123;</div><div class="line">      <span class="comment">// ...略</span></div><div class="line">      <span class="keyword">const</span> totalQuantity = addedIds.reduce(<span class="function">(<span class="params">acc, id</span>) =&gt;</span> acc + (quantityById[id] || <span class="number">0</span>), <span class="number">0</span>)</div><div class="line">      <span class="keyword">const</span> discountRate = (totalQuantity &gt;= <span class="number">3</span> ? <span class="number">0.3</span> : <span class="number">0</span>) + userDiscountRate</div><div class="line"></div><div class="line">      <span class="keyword">return</span> updateCart(&#123;</div><div class="line">        total,</div><div class="line">        products,</div><div class="line">        discountRate,</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>という感じで、難しい書き方をせずに「複数の<code>action</code>を起点に別の<code>action</code>を発行する」ような機能が実装できるのが、<code>redux-observable</code>と<code>RxJS</code>を<code>redux</code>の世界で用いるメリットということになるでしょうか。<br>ここでは触れられませんでしたが、<code>Epic</code>は<code>Observable</code>を受け取って<code>Observable</code>を返す関数に過ぎないので、<a href="http://blog.mmmcorp.co.jp/blog/2016/06/25/testing-rxjs-5/" target="_blank" rel="external">RxJSの提供するテスト手法</a>に乗っかって簡単にテストできるのもうれしいところです。</p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>以上、<code>redux-thunk</code>で非同期処理を取り扱っている<code>redux</code>の公式サンプルを<code>redux-observable</code>に置き換えて、少し仕様を複雑にするところまでを実装してみました。<br>何かの参考になればうれしいです。<br>明日の<a href="http://qiita.com/advent-calendar/2016/react" target="_blank" rel="external">React Advent Calendar 2016</a>もお楽しみに！(地図ライブラリの話めっちゃ気になります)</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://medium.com/@benlesh/redux-observable-ec0b00d2eb52" target="_blank" rel="external">RxJSのリードエンジニアによるredux-observableの紹介記事</a></li>
+<li><a href="https://redux-observable.js.org/" target="_blank" rel="external">redux-observableのドキュメント兼チュートリアル</a></li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2016/11/30/sample-redux-observable/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2016/11/30/sample-redux-observable/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/15/mocha-to-tape/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          TypeScript製ライブラリのテストフレームワークをmochaからtapeに切り替えた
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/29/newbie-of-scala/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Scalaに入門した
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>

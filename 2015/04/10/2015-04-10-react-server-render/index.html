@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Node.jsでReact.jsのサーバーサイドレンダリング | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Reactjsでwebアプリケーションを作る時に良いことの一つには、サーバーサイドレンダリングが自然な感じで出来るということがあるかと思います。
+基本的に違いは2つだけみたいです。
+
+renderメソッドの代わりにrenderToString(特殊な状況ではrenderToStaticMarkUp)を使う
+描画対象のDOMノードは指定しない
+
+こんな感じで試してみました。1234567891011">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.jsでReact.jsのサーバーサイドレンダリング">
+<meta property="og:url" content="https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="Reactjsでwebアプリケーションを作る時に良いことの一つには、サーバーサイドレンダリングが自然な感じで出来るということがあるかと思います。
+基本的に違いは2つだけみたいです。
+
+renderメソッドの代わりにrenderToString(特殊な状況ではrenderToStaticMarkUp)を使う
+描画対象のDOMノードは指定しない
+
+こんな感じで試してみました。1234567891011">
+<meta property="og:updated_time" content="2017-03-22T04:40:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.jsでReact.jsのサーバーサイドレンダリング">
+<meta name="twitter:description" content="Reactjsでwebアプリケーションを作る時に良いことの一つには、サーバーサイドレンダリングが自然な感じで出来るということがあるかと思います。
+基本的に違いは2つだけみたいです。
+
+renderメソッドの代わりにrenderToString(特殊な状況ではrenderToStaticMarkUp)を使う
+描画対象のDOMノードは指定しない
+
+こんな感じで試してみました。1234567891011">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-2015-04-10-react-server-render" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/04/10/2015-04-10-react-server-render/" class="article-date">
+  <time datetime="2015-04-09T15:00:00.000Z" itemprop="datePublished">2015-04-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Node.jsでReact.jsのサーバーサイドレンダリング
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Reactjsでwebアプリケーションを作る時に良いことの一つには、サーバーサイドレンダリングが自然な感じで出来るということがあるかと思います。</p>
+<p>基本的に違いは2つだけみたいです。</p>
+<ul>
+<li>renderメソッドの代わりにrenderToString(特殊な状況ではrenderToStaticMarkUp)を使う</li>
+<li>描画対象のDOMノードは指定しない</li>
+</ul>
+<p>こんな感じで試してみました。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> React = <span class="built_in">require</span>(<span class="string">'react'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> ServerSide = React.createClass(&#123;</div><div class="line">  <span class="attr">render</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello! React-Server-Side-Rendering.<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = React.renderToString(<span class="xml"><span class="tag">&lt;<span class="name">ServerSide</span> /&gt;</span>);</span></div><div class="line"></div><div class="line">// クライアントサイドだとこんな感じでDOMノードを指定してrenderしている</div><div class="line">// React.render(<span class="tag">&lt;<span class="name">ServerSide</span> /&gt;</span>, document.body);</div></pre></td></tr></table></figure></p>
+<p>###gulp<br>jsxで書いていたら、jsにコンパイルしてあげる必要があります。<br>上のファイルを、例えばgulpでこんな感じにコンパイルしてあげます。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">'default'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'エントリーポイントへのパス'</span>)</div><div class="line">  .pipe(react())</div><div class="line">  .pipe(gulp.dest(<span class="string">'生成先のディレクトリ'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>###サーバー側<br><a href="http://hapijs.com/" target="_blank" rel="external">Hapi</a>を使ってサーバーを立てています。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Hapi = <span class="built_in">require</span>(<span class="string">'hapi'</span>);</div><div class="line"><span class="keyword">var</span> server = <span class="keyword">new</span> Hapi.Server();</div><div class="line"><span class="keyword">var</span> ServerSide = <span class="built_in">require</span>(<span class="string">'gulpで生成したファイルへのパス'</span>);</div><div class="line"></div><div class="line">server.connection(&#123;</div><div class="line">  <span class="attr">host</span>: <span class="string">'localhost'</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">3000</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params"> req, reply </span>) </span>&#123;</div><div class="line">    <span class="comment">// React.renderToStringで生成したDOMノードをレスポンスとして返します。</span></div><div class="line">    reply(ServerSide);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.start();</div></pre></td></tr></table></figure>
+<p>これならクライアントサイドの延長で記述できそうで素敵です。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/browser/">browser</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react-js/">react.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/12/2015-04-07-gulp-newer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          gulp:開発/本番環境でタスクの内容を調整して幸せになる
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/30/2015-03-23-kindlizeit/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          kindlie化された書籍の通知サービスを作った
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>
