@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kogai.github.io/"/>
-  <updated>2017-03-22T04:40:29.000Z</updated>
+  <updated>2017-04-22T09:55:35.000Z</updated>
   <id>https://kogai.github.io/</id>
   
   <author>
@@ -14,6 +14,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>wrinting interpreter in go でRustに入門した</title>
+    <link href="https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/"/>
+    <id>https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/</id>
+    <published>2017-04-22T09:51:31.000Z</published>
+    <updated>2017-04-22T09:55:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>年明けすぐくらいに<a href="http://deeeet.com/writing/2017/01/12/go-interpreter/" target="_blank" rel="external">Writing An Interpreter In Goを読んだ</a>というポストを読んだ。<br>言語処理系の話が出てくると、イメージはあるにしても理解が怪しくて自信がないことが多かった<br>聞けば件の本は、言語処理系の実装を基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。<br>渡りに船と思い<a href="https://interpreterbook.com/" target="_blank" rel="external">Writing An Interpreter In Go</a>を購入した</p>
+<p>ただ写経するのだと身にならない気がするので、写経元のコードとは別の言語で書くことがある<br>いい機会だったのでついでに前から気になっていたRustにも入門することにした</p>
+<p>前述のブログにも書いてあったが、丁寧な解説もさることながらテストファーストで書いていくので、各々のコードが期待する機能を少しずつ満たしながら実装できるのが良かった。<br>Rustの作法で都度引っかかりながら写経したので一冊通してやり切るのに一ヶ月近くかかったが、<br>最終的に自分の手で書いたインタプリタがきちんと変数・関数を評価して答えを計算してくれたのは感動した（写経しているので当たり前ですが…）</p>
+<p>使い方や概念としては理解しているつもりのクロージャが、実際にどういう実装になっているのかを知れたのも良かった<br>こんな、単なるハッシュマップだったのか…という感じだ(他の言語でどういった処理になっているのかは知らないですが)</p>
+<p>Rustを使ってみて色々感想なども出てきたので、それはもうすぐ当番の社内勉強会で発表するつもり<br>全体としてすごく書きやすいし、コンパイルが通れば大体動く感じの信頼感があって気に入った。しばらくはRustで何か作ったりしてたい。</p>
+<p>せっかくなので書き終わったところまでのコードを置いておきます<br><a href="https://github.com/kogai/monkey" target="_blank" rel="external">https://github.com/kogai/monkey</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;年明けすぐくらいに&lt;a href=&quot;http://deeeet.com/writing/2017/01/12/go-interpreter/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Writing An Interpreter In Goを読んだ&lt;/
+    
+    </summary>
+    
+    
+      <category term="Rust" scheme="https://kogai.github.io/tags/Rust/"/>
+    
+      <category term="Language" scheme="https://kogai.github.io/tags/Language/"/>
+    
+  </entry>
   
   <entry>
     <title>正規表現をダイアグラムとして表示するVSCodeの拡張機能を作った</title>
@@ -809,56 +837,6 @@
       <category term="grunt" scheme="https://kogai.github.io/tags/grunt/"/>
     
       <category term="npm" scheme="https://kogai.github.io/tags/npm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DigitalOceanでNode.jsのサーバーを立てる初期設定メモ</title>
-    <link href="https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/"/>
-    <id>https://kogai.github.io/2014/12/23/2015-03-09-deploy-to-digital-ocean/</id>
-    <published>2014-12-23T02:58:02.000Z</published>
-    <updated>2017-03-22T04:40:29.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="ターミナルからログイン"><a href="#ターミナルからログイン" class="headerlink" title="ターミナルからログイン"></a>ターミナルからログイン</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh root@IP</div></pre></td></tr></table></figure>
-<hr>
-<h2 id="Ubuntu版"><a href="#Ubuntu版" class="headerlink" title="Ubuntu版"></a>Ubuntu版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install nodejs</div><div class="line">sudo apt-get install npm</div><div class="line">sudo apt-get install git</div><div class="line">npm install -g bower</div></pre></td></tr></table></figure>
-<hr>
-<h2 id="CentOS版"><a href="#CentOS版" class="headerlink" title="CentOS版"></a>CentOS版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">yum update</div><div class="line">curl -sL https://rpm.nodesource.com/setup | bash -</div><div class="line">yum install -y nodejs</div><div class="line">yum install git</div><div class="line">npm install -g bower</div></pre></td></tr></table></figure>
-<h3 id="gitデプロイつなぎ込み"><a href="#gitデプロイつなぎ込み" class="headerlink" title="gitデプロイつなぎ込み"></a>gitデプロイつなぎ込み</h3><p><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-automatic-deployment-with-git-with-a-vps" target="_blank" rel="external">解説記事</a></p>
-<ol>
-<li><code>/var/repo/site.git/</code> を作成して <code>git init —bare</code></li>
-<li><code>/var/repo/site.git/hooks/</code> へ移動</li>
-<li><code>cat &gt; post-receive</code> で<code>post-receive</code>ファイルを作成</li>
-<li><p><code>vim</code>モードにするなどして以下記入<code>:x</code>で保存</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">git --work-tree=/var/www/ディレクトリ名 --git-dir=/var/repo/site.git checkout <span class="_">-f</span></div></pre></td></tr></table></figure>
-</li>
-<li><p><code>chmod +x post-receive</code></p>
-</li>
-<li><p>ローカルレポジトリにgitパスをつなぎ込み</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote add product ssh://root@IP/var/repo/site.git</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>SSHキー</code>の登録（新規アカウント作成時のみ）</p>
-</li>
-<li><p>プッシュしてデプロイ</p>
-</li>
-</ol>
-<h3 id="サーバー永続化"><a href="#サーバー永続化" class="headerlink" title="サーバー永続化"></a>サーバー永続化</h3><p><code>npm</code>の<code>pm2</code>をインストール<br><code>pm2 start app.js</code> でサーバー永続化</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;ターミナルからログイン&quot;&gt;&lt;a href=&quot;#ターミナルからログイン&quot; class=&quot;headerlink&quot; title=&quot;ターミナルからログイン&quot;&gt;&lt;/a&gt;ターミナルからログイン&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;tabl
-    
-    </summary>
-    
-    
-      <category term="server" scheme="https://kogai.github.io/tags/server/"/>
-    
-      <category term="digitalocean" scheme="https://kogai.github.io/tags/digitalocean/"/>
-    
-      <category term="git" scheme="https://kogai.github.io/tags/git/"/>
-    
-      <category term="node.js" scheme="https://kogai.github.io/tags/node-js/"/>
     
   </entry>
   

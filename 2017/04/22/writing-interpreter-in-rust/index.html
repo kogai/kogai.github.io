@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>wrinting interpreter in go でRustに入門した | タイトル未定(仮)</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。言語処理系の話が出てくると、イメージはあるにしても理解が怪しくて自信がないことが多かった聞けば件の本は、言語処理系の実装を基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と思いWriting An Interpreter In">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wrinting interpreter in go でRustに入門した">
+<meta property="og:url" content="https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/index.html">
+<meta property="og:site_name" content="タイトル未定(仮)">
+<meta property="og:description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。言語処理系の話が出てくると、イメージはあるにしても理解が怪しくて自信がないことが多かった聞けば件の本は、言語処理系の実装を基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と思いWriting An Interpreter In">
+<meta property="og:updated_time" content="2017-04-22T09:55:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="wrinting interpreter in go でRustに入門した">
+<meta name="twitter:description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。言語処理系の話が出てくると、イメージはあるにしても理解が怪しくて自信がないことが多かった聞けば件の本は、言語処理系の実装を基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と思いWriting An Interpreter In">
+  
+    <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/list">過去に作ったもの</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kogai.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-writing-interpreter-in-rust" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/04/22/writing-interpreter-in-rust/" class="article-date">
+  <time datetime="2017-04-22T09:51:31.000Z" itemprop="datePublished">2017-04-22</time>
+</a>
+		</span>
+		<span class="meta-elements author">Shinichi Kogai</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      wrinting interpreter in go でRustに入門した
+    </h1>
+  
+
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>年明けすぐくらいに<a href="http://deeeet.com/writing/2017/01/12/go-interpreter/" target="_blank" rel="external">Writing An Interpreter In Goを読んだ</a>というポストを読んだ。<br>言語処理系の話が出てくると、イメージはあるにしても理解が怪しくて自信がないことが多かった<br>聞けば件の本は、言語処理系の実装を基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。<br>渡りに船と思い<a href="https://interpreterbook.com/" target="_blank" rel="external">Writing An Interpreter In Go</a>を購入した</p>
+<p>ただ写経するのだと身にならない気がするので、写経元のコードとは別の言語で書くことがある<br>いい機会だったのでついでに前から気になっていたRustにも入門することにした</p>
+<p>前述のブログにも書いてあったが、丁寧な解説もさることながらテストファーストで書いていくので、各々のコードが期待する機能を少しずつ満たしながら実装できるのが良かった。<br>Rustの作法で都度引っかかりながら写経したので一冊通してやり切るのに一ヶ月近くかかったが、<br>最終的に自分の手で書いたインタプリタがきちんと変数・関数を評価して答えを計算してくれたのは感動した（写経しているので当たり前ですが…）</p>
+<p>使い方や概念としては理解しているつもりのクロージャが、実際にどういう実装になっているのかを知れたのも良かった<br>こんな、単なるハッシュマップだったのか…という感じだ(他の言語でどういった処理になっているのかは知らないですが)</p>
+<p>Rustを使ってみて色々感想なども出てきたので、それはもうすぐ当番の社内勉強会で発表するつもり<br>全体としてすごく書きやすいし、コンパイルが通れば大体動く感じの信頼感があって気に入った。しばらくはRustで何か作ったりしてたい。</p>
+<p>せっかくなので書き終わったところまでのコードを置いておきます<br><a href="https://github.com/kogai/monkey" target="_blank" rel="external">https://github.com/kogai/monkey</a></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<ul class="social-button">
+	<li>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://kogai.github.io/https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	</li>
+	<li>
+		<a href="http://b.hatena.ne.jp/entry/https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+			<img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+		</a>
+		<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	</li>
+</ul>
+
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Language/">Language</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Rust/">Rust</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/22/made-vscode-extension/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          正規表現をダイアグラムとして表示するVSCodeの拡張機能を作った
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:kogai.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">タイトル未定(仮)</a>
+	</h1>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TPC5KQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TPC5KQ');</script>
+  <!-- End Google Tag Manager -->
+</body>
+</html>
