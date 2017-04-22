@@ -5,16 +5,16 @@
   
   <title>wrinting interpreter in go でRustに入門した | タイトル未定(仮)</title>
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしくて自信がないことが多かった聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と">
+  <meta name="description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしかった聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と思いWriting A">
 <meta property="og:type" content="article">
 <meta property="og:title" content="wrinting interpreter in go でRustに入門した">
 <meta property="og:url" content="https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/index.html">
 <meta property="og:site_name" content="タイトル未定(仮)">
-<meta property="og:description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしくて自信がないことが多かった聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と">
-<meta property="og:updated_time" content="2017-04-22T09:59:35.000Z">
+<meta property="og:description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしかった聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と思いWriting A">
+<meta property="og:updated_time" content="2017-04-22T10:06:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="wrinting interpreter in go でRustに入門した">
-<meta name="twitter:description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしくて自信がないことが多かった聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と">
+<meta name="twitter:description" content="年明けすぐくらいにWriting An Interpreter In Goを読んだというポストを読んだ。今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしかった聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。渡りに船と思いWriting A">
   
     <link rel="alternative" href="/atom.xml" title="タイトル未定(仮)" type="application/atom+xml">
   
@@ -83,11 +83,12 @@
 	</header>
 	<div class="entry-content">
 		
-    	<p>年明けすぐくらいに<a href="http://deeeet.com/writing/2017/01/12/go-interpreter/" target="_blank" rel="external">Writing An Interpreter In Goを読んだ</a>というポストを読んだ。<br>今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしくて自信がないことが多かった<br>聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。<br>渡りに船と思い<a href="https://interpreterbook.com/" target="_blank" rel="external">Writing An Interpreter In Go</a>を購入した</p>
-<p>ただ写経するのだと身にならない気がするので、写経元のコードとは別の言語で書くことがある<br>いい機会だったのでついでに前から気になっていたRustにも入門することにした</p>
-<p>前述のブログにも書いてあったが、丁寧な解説もさることながらテストファーストで書いていくので、各々のコードが期待する機能を少しずつ満たしながら実装できるのが良かった。<br>Rustの作法で都度引っかかりながら写経したので一冊通してやり切るのに一ヶ月近くかかったが、<br>最終的に自分の手で書いたインタプリタがきちんと変数・関数を評価して答えを計算してくれたのは感動した（写経しているので当たり前ですが…）</p>
-<p>使い方や概念としては理解しているつもりのクロージャが、実際にどういう実装になっているのかを知れたのも良かった<br>こんな、単なるハッシュマップだったのか…という感じだ(他の言語でどういった処理になっているのかは知らないですが)</p>
-<p>Rustを使ってみて色々感想なども出てきたので、それはもうすぐ当番の社内勉強会で発表するつもり<br>全体としてすごく書きやすいし、コンパイルが通れば大体動く感じの信頼感があって気に入った。しばらくはRustで何か作ったりしてたい。<br>(とは言えRust独自の概念に慣れるまでは一向にコンパイルが通らず、文字列の結合すらできないワイはダメなやつなんや…と落ち込んだ)</p>
+    	<p>年明けすぐくらいに<a href="http://deeeet.com/writing/2017/01/12/go-interpreter/" target="_blank" rel="external">Writing An Interpreter In Goを読んだ</a>というポストを読んだ。<br>今までコード関係の記事や書籍などを読んでいても、言語処理系の話は(自分なりのイメージはあるにしても)理解があやしかった<br>聞けば件の書籍では言語処理系の実装を、基本から丁寧に（本来ライブラリで解決するようなところも含めて）コードを見せながら解説してくれているとのこと。<br>渡りに船と思い<a href="https://interpreterbook.com/" target="_blank" rel="external">Writing An Interpreter In Go</a>を購入した。</p>
+<p>ただ写経するのだと身にならない気がするので、写経元のコードとは別の言語で書くことがある<br>いい機会だったのでついでに前から気になっていたRustにも入門することにした。</p>
+<p>前述のブログにも書いてあったが、丁寧な解説もさることながらテストファーストで書かれている。<br>そのため、各々のコードが期待する機能を少しずつ満たしながら実装できるのが良かった。</p>
+<p>Rustの作法で都度引っかかりながら写経したので一冊通してやり切るのに一ヶ月近くかかったが、<br>最終的に自分の手で書いたインタプリタがきちんと変数・関数を評価して答えを計算してくれたのは感動した（写経しているので当たり前ですが…）</p>
+<p>使い方や概念としては理解しているつもりのクロージャが、実際はどういう実装になっているのかを知れたのも良かった<br>こんな、単なるハッシュマップだったのか…という感じだ(他の言語でどういった処理になっているのかは知らないですが)</p>
+<p>Rustを使ってみて色々感想なども出てきたので、それはもうすぐ当番の社内勉強会で発表するつもりだ。<br>全体としてすごく書きやすいし、コンパイルが通れば大体動く感じの信頼感があって気に入った。しばらくはRustで何か作ったりしてたい。<br>(とは言えRust独自の概念に慣れるまでは一向にコンパイルが通らず、文字列の結合すらできないワイはダメなやつなんや…と落ち込んだ)</p>
 <p>せっかくなので書き終わったところまでのコードを置いておきます<br><a href="https://github.com/kogai/monkey" target="_blank" rel="external">https://github.com/kogai/monkey</a></p>
 
     
