@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://kogai.github.io/list/index.html</loc>
+    
+    <lastmod>2017-07-18T00:19:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://kogai.github.io/2017/04/22/writing-interpreter-in-rust/</loc>
     
     <lastmod>2017-04-22T10:06:41.000Z</lastmod>
@@ -33,13 +40,6 @@
     <loc>https://kogai.github.io/2016/12/15/mocha-to-tape/</loc>
     
     <lastmod>2017-04-13T12:15:43.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/</loc>
-    
-    <lastmod>2017-03-22T04:40:29.000Z</lastmod>
     
   </url>
   
@@ -170,7 +170,7 @@
   </url>
   
   <url>
-    <loc>https://kogai.github.io/list/index.html</loc>
+    <loc>https://kogai.github.io/2015/04/10/2015-04-10-react-server-render/</loc>
     
     <lastmod>2017-03-22T04:40:29.000Z</lastmod>
     
